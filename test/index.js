@@ -20,12 +20,54 @@ const db = require("../db/branch");
 describe('branch model validation', () => {
   let branchObject = {
     // add a valid branch Object here
-
+    "tenantId": "IVL",
+    "code": "bc1",
+    "name": "branch1",
+    "contact": {
+      "tenantId": "tenId",
+      "firstName": "Kamala",
+      "middleName": "rani",
+      "lastName": "p",
+      "email": "kamala@gmail.com",
+      "emailVerified": true,
+      "phoneNo": "264123",
+      "mobileNo": "9878586312",
+      "mobileVerified": true,
+      "faxNumber": "1221",
+      "companyName": "Evolvus",
+      "Address1": "Bangalore",
+      "Address2": "chennai",
+      "city": "Bangalore",
+      "state": "karnataka",
+      "country": "India",
+      "zipCode": "6868"
+    }
   };
 
-  let invalidObject={
+  let invalidObject = {
     //add invalid branch Object here
-
+    "tenantId": "IVL",
+    "code": 4575678,
+    "name": "branch1",
+    "contact": {
+      "tenantId": "tenId",
+      "firstName": "Kamala",
+      "middleName": "rani",
+      "lastName": "p",
+      "email": "kamala@gmail.com",
+      "emailVerified": true,
+      "phoneNo": "264123",
+      "mobileNo": "9878586312",
+      "mobileVerified": true,
+      "faxNumber": "1221",
+      "companyName": "Evolvus",
+      "Address1": "Bangalore",
+      "Address2": "chennai",
+      "city": "Bangalore",
+      "state": "karnataka",
+      "country": "India",
+      "zipCode": "6868"
+    }
   };
 
   let undefinedObject; // object that is not defined
@@ -36,12 +78,12 @@ describe('branch model validation', () => {
     mongoose.connect(MONGO_DB_URL);
     let connection = mongoose.connection;
     connection.once("open", () => {
-        debug("ok got the connection");
-        done();
+      debug("ok got the connection");
+      done();
     });
   });
 
-  describe("validation against jsonschema",()=> {
+  describe("validation against jsonschema", () => {
     it("valid branch should validate successfully", (done) => {
       try {
         var res = branch.validate(branchObject);
@@ -66,34 +108,34 @@ describe('branch model validation', () => {
       }
     });
 
-    if("should error out for undefined objects", (done) => {
-      try {
-        var res = branch.validate(undefinedObject);
-        expect(res)
-          .to.be.rejected
-          .notify(done);
-      } catch (e) {
-        expect.fail(e, null, `exception: ${e}`);
-      }
-    });
+    if ("should error out for undefined objects", (done) => {
+        try {
+          var res = branch.validate(undefinedObject);
+          expect(res)
+            .to.be.rejected
+            .notify(done);
+        } catch (e) {
+          expect.fail(e, null, `exception: ${e}`);
+        }
+      });
 
-    if("should error out for null objects", (done) => {
-      try {
-        var res = branch.validate(nullObject);
-        expect(res)
-          .to.be.rejected
-          .notify(done);
-      } catch (e) {
-        expect.fail(e, null, `exception: ${e}`);
-      }
-    });
+    if ("should error out for null objects", (done) => {
+        try {
+          var res = branch.validate(nullObject);
+          expect(res)
+            .to.be.rejected
+            .notify(done);
+        } catch (e) {
+          expect.fail(e, null, `exception: ${e}`);
+        }
+      });
 
   });
 
-  describe("testing branch.save method",()=> {
+  describe("testing branch.save method", () => {
 
-    beforeEach((done)=> {
-      db.deleteAll().then((res)=> {
+    beforeEach((done) => {
+      db.deleteAll().then((res) => {
         done();
       });
     });
@@ -103,8 +145,8 @@ describe('branch model validation', () => {
         var result = branch.save(branchObject);
         //replace anyAttribute with one of the valid attribute of a branch Object
         expect(result)
-          .to.eventually.have.property("anyAttribute")
-          .to.eql(branchObject.anyAttribute)
+          .to.eventually.have.property("code")
+          .to.eql(branchObject.code)
           .notify(done);
       } catch (e) {
         expect.fail(e, null, `saving branch object should not throw exception: ${e}`);
@@ -125,18 +167,85 @@ describe('branch model validation', () => {
   });
 
   describe('testing branch.getAll when there is data in database', () => {
-    let object1={
-      //add one valid branch object here
-
-    },object2={
-      //add one more valid branch object here
-
+    let object1 = {
+        //add one valid branch object here
+        "tenantId": "IVL",
+        "code": "bc1",
+        "name": "branch1",
+        "contact": {
+          "tenantId": "tenId",
+          "firstName": "Kamala",
+          "middleName": "rani",
+          "lastName": "p",
+          "email": "kamala@gmail.com",
+          "emailVerified": true,
+          "phoneNo": "264123",
+          "mobileNo": "9878586312",
+          "mobileVerified": true,
+          "faxNumber": "1221",
+          "companyName": "Evolvus",
+          "Address1": "Bangalore",
+          "Address2": "chennai",
+          "city": "Bangalore",
+          "state": "karnataka",
+          "country": "India",
+          "zipCode": "6868"
+        }
+      },
+      object2 = {
+        //add one more valid branch object here
+        "tenantId": "IVL",
+        "code": "bc2",
+        "name": "branch2",
+        "contact": {
+          "tenantId": "tenId",
+          "firstName": "Kamala",
+          "middleName": "rani",
+          "lastName": "p",
+          "email": "kamala@gmail.com",
+          "emailVerified": true,
+          "phoneNo": "264123",
+          "mobileNo": "9878586312",
+          "mobileVerified": true,
+          "faxNumber": "1221",
+          "companyName": "Evolvus",
+          "Address1": "Bangalore",
+          "Address2": "chennai",
+          "city": "Bangalore",
+          "state": "karnataka",
+          "country": "India",
+          "zipCode": "6868"
+        }
+      };
+    let object3 = {
+      "tenantId": "IVL",
+      "code": "bc3",
+      "name": "branch3",
+      "contact": {
+        "tenantId": "tenId",
+        "firstName": "Kamala",
+        "middleName": "rani",
+        "lastName": "p",
+        "email": "kamala@gmail.com",
+        "emailVerified": true,
+        "phoneNo": "264123",
+        "mobileNo": "9878586312",
+        "mobileVerified": true,
+        "faxNumber": "1221",
+        "companyName": "Evolvus",
+        "Address1": "Bangalore",
+        "Address2": "chennai",
+        "city": "Bangalore",
+        "state": "karnataka",
+        "country": "India",
+        "zipCode": "6868"
+      }
     };
     beforeEach((done) => {
       db.deleteAll().then((res) => {
         db.save(object1).then((res) => {
           db.save(object2).then((res) => {
-            db.save(object1).then((res)=> {
+            db.save(object3).then((res) => {
               done();
             });
           });
@@ -156,7 +265,7 @@ describe('branch model validation', () => {
             done();
           });
       } catch (e) {
-          expect.fail(e, null, `exception: ${e}`);
+        expect.fail(e, null, `exception: ${e}`);
       }
     });
 
@@ -172,7 +281,7 @@ describe('branch model validation', () => {
             done();
           });
       } catch (e) {
-          expect.fail(e, null, `exception: ${e}`);
+        expect.fail(e, null, `exception: ${e}`);
       }
     });
 
@@ -183,7 +292,7 @@ describe('branch model validation', () => {
           .to.be.rejectedWith("IllegalArgumentException")
           .notify(done);
       } catch (e) {
-          expect.fail(e, null, `exception: ${e}`);
+        expect.fail(e, null, `exception: ${e}`);
       }
     });
 
@@ -195,7 +304,7 @@ describe('branch model validation', () => {
           .to.be.rejectedWith("IllegalArgumentException")
           .notify(done);
       } catch (e) {
-          expect.fail(e, null, `exception: ${e}`);
+        expect.fail(e, null, `exception: ${e}`);
       }
     });
 
@@ -247,6 +356,30 @@ describe('branch model validation', () => {
   });
 
   describe('testing getById', () => {
+    let branchObject = {
+      "tenantId": "IVL",
+      "code": "bc1",
+      "name": "branch1",
+      "contact": {
+        "tenantId": "tenId",
+        "firstName": "Kamala",
+        "middleName": "rani",
+        "lastName": "p",
+        "email": "kamala@gmail.com",
+        "emailVerified": true,
+        "phoneNo": "264123",
+        "mobileNo": "9878586312",
+        "mobileVerified": true,
+        "faxNumber": "1221",
+        "companyName": "Evolvus",
+        "Address1": "Bangalore",
+        "Address2": "chennai",
+        "city": "Bangalore",
+        "state": "karnataka",
+        "country": "India",
+        "zipCode": "6868"
+      }
+    };
     // Insert one record , get its id
     // 1. Query by this id and it should return one branch object
     // 2. Query by an arbitrary id and it should return {}
@@ -254,9 +387,11 @@ describe('branch model validation', () => {
     // 4. Query with undefined and it should throw IllegalArgumentException
     var id;
     beforeEach((done) => {
-      db.save(branchObject).then((res) => {
-        id = res._id;
-        done();
+      db.deleteAll().then((res) => {
+        db.save(branchObject).then((res) => {
+          id = res._id;
+          done();
+        });
       });
     });
 
@@ -316,32 +451,75 @@ describe('branch model validation', () => {
 
   });
 
-  describe("testing branch.getOne",()=> {
-    let object1={
-      //add one valid branch object here
-
-    },object2={
-      //add one more valid branch object here
-
-    };
+  describe("testing branch.getOne", () => {
+    let object1 = {
+        //add one valid branch object here
+        "tenantId": "IVL",
+        "code": "bc1",
+        "name": "branch1",
+        "contact": {
+          "tenantId": "tenId",
+          "firstName": "Kamala",
+          "middleName": "rani",
+          "lastName": "p",
+          "email": "kamala@gmail.com",
+          "emailVerified": true,
+          "phoneNo": "264123",
+          "mobileNo": "9878586312",
+          "mobileVerified": true,
+          "faxNumber": "1221",
+          "companyName": "Evolvus",
+          "Address1": "Bangalore",
+          "Address2": "chennai",
+          "city": "Bangalore",
+          "state": "karnataka",
+          "country": "India",
+          "zipCode": "6868"
+        }
+      },
+      object2 = {
+        //add one more valid branch object here
+        "tenantId": "IVL",
+        "code": "bc2",
+        "name": "branch2",
+        "contact": {
+          "tenantId": "tenId",
+          "firstName": "Kamala",
+          "middleName": "rani",
+          "lastName": "p",
+          "email": "kamala@gmail.com",
+          "emailVerified": true,
+          "phoneNo": "264123",
+          "mobileNo": "9878586312",
+          "mobileVerified": true,
+          "faxNumber": "1221",
+          "companyName": "Evolvus",
+          "Address1": "Bangalore",
+          "Address2": "chennai",
+          "city": "Bangalore",
+          "state": "karnataka",
+          "country": "India",
+          "zipCode": "6868"
+        }
+      };
     beforeEach((done) => {
       db.deleteAll().then((res) => {
         db.save(object1).then((res) => {
           db.save(object2).then((res) => {
-              done();
+            done();
           });
         });
       });
     });
 
-    it("should return one branch record identified by attribute",(done)=> {
+    it("should return one branch record identified by attribute", (done) => {
       try {
         // take one attribute from object1 or object2 and its value
-        let res = branch.getOne(attribute of object1/object2,its value);
+        let res = branch.getOne(`code`, `bc1`);
         expect(res)
           .to.eventually.be.a("object")
-          .to.have.property('attribute of object1/object2')
-          .to.eql('attribute value')
+          .to.have.property('code')
+          .to.eql('bc1')
           .notify(done);
       } catch (e) {
         expect.fail(e, null, `exception: ${e}`);
@@ -351,7 +529,7 @@ describe('branch model validation', () => {
     it('should return empty object i.e. {} as no branch is identified by this attribute', (done) => {
       try {
         // replace validAttribute and add a bad value to it
-        var res = branch.getOne(validAttribute,badValue);
+        var res = branch.getOne(`code`, `1dfhty`);
         expect(res).to.eventually.to.eql({})
           .notify(done);
       } catch (e) {
@@ -363,7 +541,7 @@ describe('branch model validation', () => {
       try {
         //replace validvalue with a valid value for an attribute
         let undefinedAttribute;
-        let res = branch.getOne(undefinedAttribute,validValue);
+        let res = branch.getOne(undefinedAttribute, `bc1`);
         expect(res)
           .to.eventually.to.be.rejectedWith("IllegalArgumentException")
           .notify(done);
@@ -376,7 +554,7 @@ describe('branch model validation', () => {
       try {
         // replace validAttribute with a valid attribute name
         let undefinedValue;
-        let res = branch.getOne(validAttribute,undefinedValue);
+        let res = branch.getOne(`code`, undefinedValue);
         expect(res)
           .to.eventually.to.be.rejectedWith("IllegalArgumentException")
           .notify(done);
@@ -388,7 +566,7 @@ describe('branch model validation', () => {
     it("should throw IllegalArgumentException for null attribute parameter ", (done) => {
       try {
         //replace validValue with a valid value for an attribute
-        let res = branch.getOne(null,validValue);
+        let res = branch.getOne(null, `bc1`);
         expect(res)
           .to.eventually.to.be.rejectedWith("IllegalArgumentException")
           .notify(done);
@@ -400,7 +578,7 @@ describe('branch model validation', () => {
     it("should throw IllegalArgumentException for null value parameter ", (done) => {
       try {
         //replace attributeValue with a valid attribute name
-        let res = branch.getOne(attributeValue,null);
+        let res = branch.getOne(`code`, null);
         expect(res)
           .to.eventually.to.be.rejectedWith("IllegalArgumentException")
           .notify(done);
@@ -411,96 +589,139 @@ describe('branch model validation', () => {
   });
 
 
-  describe("testing branch.getMany",()=> {
-      let object1={
+  describe("testing branch.getMany", () => {
+    let object1 = {
         //add one valid branch object here
-
-      },object2={
+        "tenantId": "IVL",
+        "code": "bc1",
+        "name": "branch1",
+        "contact": {
+          "tenantId": "tenId",
+          "firstName": "Kamala",
+          "middleName": "rani",
+          "lastName": "p",
+          "email": "kamala@gmail.com",
+          "emailVerified": true,
+          "phoneNo": "264123",
+          "mobileNo": "9878586312",
+          "mobileVerified": true,
+          "faxNumber": "1221",
+          "companyName": "Evolvus",
+          "Address1": "Bangalore",
+          "Address2": "chennai",
+          "city": "Bangalore",
+          "state": "karnataka",
+          "country": "India",
+          "zipCode": "6868"
+        }
+      },
+      object2 = {
         //add one more valid branch object here
-
+        "tenantId": "IVL",
+        "code": "bc2",
+        "name": "branch2",
+        "contact": {
+          "tenantId": "tenId",
+          "firstName": "Kamala",
+          "middleName": "rani",
+          "lastName": "p",
+          "email": "kamala@gmail.com",
+          "emailVerified": true,
+          "phoneNo": "264123",
+          "mobileNo": "9878586312",
+          "mobileVerified": true,
+          "faxNumber": "1221",
+          "companyName": "Evolvus",
+          "Address1": "Bangalore",
+          "Address2": "chennai",
+          "city": "Bangalore",
+          "state": "karnataka",
+          "country": "India",
+          "zipCode": "6868"
+        }
       };
-      beforeEach((done) => {
-        db.deleteAll().then((res) => {
-          db.save(object1).then((res) => {
-            db.save(object2).then((res) => {
-                done();
-            });
+    beforeEach((done) => {
+      db.deleteAll().then((res) => {
+        db.save(object1).then((res) => {
+          db.save(object2).then((res) => {
+            done();
           });
         });
       });
-
-      it("should return array of branch records identified by attribute",(done)=> {
-        try {
-          // take one attribute from object1 or object2 and its value
-          let res = branch.getMany(attribute of object1/object2,its value);
-          expect(res).to.eventually.be.a("array");
-          //enter proper length according to input value
-          expect(res).to.eventually.have.length(1);
-          done();
-        } catch (e) {
-          expect.fail(e, null, `exception: ${e}`);
-        }
-      });
-
-      it('should return empty array i.e. [] as no branch is identified by this attribute', (done) => {
-        try {
-          // replace validAttribute and add a bad value to it
-          var res = branch.getMany(validAttribute,badValue);
-          expect(res).to.eventually.to.eql([])
-            .notify(done);
-        } catch (e) {
-          expect.fail(e, null, `exception: ${e}`);
-        }
-      });
-
-      it("should throw IllegalArgumentException for undefined Attribute parameter ", (done) => {
-        try {
-          //replace validvalue with a valid value for an attribute
-          let undefinedAttribute;
-          let res = branch.getMany(undefinedAttribute,validValue);
-          expect(res)
-            .to.eventually.to.be.rejectedWith("IllegalArgumentException")
-            .notify(done);
-        } catch (e) {
-          expect.fail(e, null, `exception: ${e}`);
-        }
-      });
-
-      it("should throw IllegalArgumentException for undefined Attribute parameter ", (done) => {
-        try {
-          // replace validAttribute with a valid attribute name
-          let undefinedValue;
-          let res = branch.getMany(validAttribute,undefinedValue);
-          expect(res)
-            .to.eventually.to.be.rejectedWith("IllegalArgumentException")
-            .notify(done);
-        } catch (e) {
-          expect.fail(e, null, `exception: ${e}`);
-        }
-      });
-
-      it("should throw IllegalArgumentException for null attribute parameter ", (done) => {
-        try {
-          //replace validValue with a valid value for an attribute
-          let res = branch.getMany(null,validValue);
-          expect(res)
-            .to.eventually.to.be.rejectedWith("IllegalArgumentException")
-            .notify(done);
-        } catch (e) {
-          expect.fail(e, null, `exception: ${e}`);
-        }
-      });
-
-      it("should throw IllegalArgumentException for null value parameter ", (done) => {
-        try {
-          //replace attributeValue with a valid attribute name
-          let res = branch.getMany(attributeValue,null);
-          expect(res)
-            .to.eventually.to.be.rejectedWith("IllegalArgumentException")
-            .notify(done);
-        } catch (e) {
-          expect.fail(e, null, `exception: ${e}`);
-        }
-      });
     });
+
+    it("should return array of branch records identified by attribute", (done) => {
+      try {
+        // take one attribute from object1 or object2 and its value
+        let res = branch.getMany(`code`, `bc1`);
+        expect(res).to.eventually.be.a("array");
+        //enter proper length according to input value
+        expect(res).to.eventually.have.length(1);
+        done();
+      } catch (e) {
+        expect.fail(e, null, `exception: ${e}`);
+      }
+    });
+
+    it('should return empty array i.e. [] as no branch is identified by this attribute', (done) => {
+      try {
+        // replace validAttribute and add a bad value to it
+        var res = branch.getMany(`code`, `dfgy`);
+        expect(res).to.eventually.to.eql([])
+          .notify(done);
+      } catch (e) {
+        expect.fail(e, null, `exception: ${e}`);
+      }
+    });
+
+    it("should throw IllegalArgumentException for undefined Attribute parameter ", (done) => {
+      try {
+        //replace validvalue with a valid value for an attribute
+        let undefinedAttribute;
+        let res = branch.getMany(undefinedAttribute, `bc1`);
+        expect(res)
+          .to.eventually.to.be.rejectedWith("IllegalArgumentException")
+          .notify(done);
+      } catch (e) {
+        expect.fail(e, null, `exception: ${e}`);
+      }
+    });
+
+    it("should throw IllegalArgumentException for undefined Attribute parameter ", (done) => {
+      try {
+        // replace validAttribute with a valid attribute name
+        let undefinedValue;
+        let res = branch.getMany(`code`, undefinedValue);
+        expect(res)
+          .to.eventually.to.be.rejectedWith("IllegalArgumentException")
+          .notify(done);
+      } catch (e) {
+        expect.fail(e, null, `exception: ${e}`);
+      }
+    });
+
+    it("should throw IllegalArgumentException for null attribute parameter ", (done) => {
+      try {
+        //replace validValue with a valid value for an attribute
+        let res = branch.getMany(null, `bc1`);
+        expect(res)
+          .to.eventually.to.be.rejectedWith("IllegalArgumentException")
+          .notify(done);
+      } catch (e) {
+        expect.fail(e, null, `exception: ${e}`);
+      }
+    });
+
+    it("should throw IllegalArgumentException for null value parameter ", (done) => {
+      try {
+        //replace attributeValue with a valid attribute name
+        let res = branch.getMany(`code`, null);
+        expect(res)
+          .to.eventually.to.be.rejectedWith("IllegalArgumentException")
+          .notify(done);
+      } catch (e) {
+        expect.fail(e, null, `exception: ${e}`);
+      }
+    });
+  });
 });

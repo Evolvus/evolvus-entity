@@ -4,32 +4,39 @@ const branchSchema = require("./model/branchSchema")
 const branchCollection = require("./db/branch");
 const validate = require("jsonschema")
   .validate;
-const docketClient=require("evolvus-docket-client");
+const docketClient = require("evolvus-docket-client");
 
-var docketObject={
+var branchDBschema = require("./db/branchSchema");
+
+var docketObject = {
   // required fields
-  application:"PLATFORM",
-  source:"branch",
-  name:"",
-  createdBy:"",
-  ipAddress:"",
-  status:"SUCCESS", //by default
-  eventDateTime:Date.now(),
-  keyDataAsJSON:"",
-  details:"",
+  application: "PLATFORM",
+  source: "branch",
+  name: "",
+  createdBy: "",
+  ipAddress: "",
+  status: "SUCCESS", //by default
+  eventDateTime: Date.now(),
+  keyDataAsJSON: "",
+  details: "",
   //non required fields
-  level:""
+  level: ""
+};
+
+module.exports.branch = {
+  branchDBschema,
+  branchSchema
 };
 
 module.exports.validate = (branchObject) => {
   return new Promise((resolve, reject) => {
     try {
-      if(typeof branchObject==="undefined" ) {
+      if (typeof branchObject === "undefined") {
         throw new Error("IllegalArgumentException:branchObject is undefined");
       }
       var res = validate(branchObject, branchSchema);
       debug("validation status: ", JSON.stringify(res));
-      if(res.valid) {
+      if (res.valid) {
         resolve(res.valid);
       } else {
         reject(res.errors);
@@ -45,16 +52,16 @@ module.exports.validate = (branchObject) => {
 module.exports.save = (branchObject) => {
   return new Promise((resolve, reject) => {
     try {
-      if(typeof branchObject === 'undefined' || branchObject == null) {
-         throw new Error("IllegalArgumentException: branchObject is null or undefined");
+      if (typeof branchObject === 'undefined' || branchObject == null) {
+        throw new Error("IllegalArgumentException: branchObject is null or undefined");
       }
-      docketObject.name="branch_save";
-      docketObject.keyDataAsJSON=JSON.stringify(branchObject);
-      docketObject.details=`branch creation initiated`;
+      docketObject.name = "branch_save";
+      docketObject.keyDataAsJSON = JSON.stringify(branchObject);
+      docketObject.details = `branch creation initiated`;
       docketClient.postToDocket(docketObject);
       var res = validate(branchObject, branchSchema);
       debug("validation status: ", JSON.stringify(res));
-      if(!res.valid) {
+      if (!res.valid) {
         reject(res.errors);
       }
 
@@ -70,9 +77,9 @@ module.exports.save = (branchObject) => {
         reject(e);
       });
     } catch (e) {
-      docketObject.name="branch_ExceptionOnSave";
-      docketObject.keyDataAsJSON=JSON.stringify(branchObject);
-      docketObject.details=`caught Exception on branch_save ${e.message}`;
+      docketObject.name = "branch_ExceptionOnSave";
+      docketObject.keyDataAsJSON = JSON.stringify(branchObject);
+      docketObject.details = `caught Exception on branch_save ${e.message}`;
       docketClient.postToDocket(docketObject);
       debug(`caught exception ${e}`);
       reject(e);
@@ -89,9 +96,9 @@ module.exports.getAll = (limit) => {
       if (typeof(limit) == "undefined" || limit == null) {
         throw new Error("IllegalArgumentException: limit is null or undefined");
       }
-      docketObject.name="branch_getAll";
-      docketObject.keyDataAsJSON=`getAll with limit ${limit}`;
-      docketObject.details=`branch getAll method`;
+      docketObject.name = "branch_getAll";
+      docketObject.keyDataAsJSON = `getAll with limit ${limit}`;
+      docketObject.details = `branch getAll method`;
       docketClient.postToDocket(docketObject);
 
       branchCollection.findAll(limit).then((docs) => {
@@ -102,9 +109,9 @@ module.exports.getAll = (limit) => {
         reject(e);
       });
     } catch (e) {
-      docketObject.name="branch_ExceptionOngetAll";
-      docketObject.keyDataAsJSON="branchObject";
-      docketObject.details=`caught Exception on branch_getAll ${e.message}`;
+      docketObject.name = "branch_ExceptionOngetAll";
+      docketObject.keyDataAsJSON = "branchObject";
+      docketObject.details = `caught Exception on branch_getAll ${e.message}`;
       docketClient.postToDocket(docketObject);
       debug(`caught exception ${e}`);
       reject(e);
@@ -121,9 +128,9 @@ module.exports.getById = (id) => {
       if (typeof(id) == "undefined" || id == null) {
         throw new Error("IllegalArgumentException: id is null or undefined");
       }
-      docketObject.name="branch_getById";
-      docketObject.keyDataAsJSON=`branchObject id is ${id}`;
-      docketObject.details=`branch getById initiated`;
+      docketObject.name = "branch_getById";
+      docketObject.keyDataAsJSON = `branchObject id is ${id}`;
+      docketObject.details = `branch getById initiated`;
       docketClient.postToDocket(docketObject);
 
       branchCollection.findById(id)
@@ -142,9 +149,9 @@ module.exports.getById = (id) => {
         });
 
     } catch (e) {
-      docketObject.name="branch_ExceptionOngetById";
-      docketObject.keyDataAsJSON=`branchObject id is ${id}`;
-      docketObject.details=`caught Exception on branch_getById ${e.message}`;
+      docketObject.name = "branch_ExceptionOngetById";
+      docketObject.keyDataAsJSON = `branchObject id is ${id}`;
+      docketObject.details = `caught Exception on branch_getById ${e.message}`;
       docketClient.postToDocket(docketObject);
       debug(`caught exception ${e}`);
       reject(e);
@@ -152,18 +159,18 @@ module.exports.getById = (id) => {
   });
 };
 
-module.exports.getOne=(attribute,value)=> {
-  return new Promise((resolve,reject)=> {
+module.exports.getOne = (attribute, value) => {
+  return new Promise((resolve, reject) => {
     try {
       if (attribute == null || value == null || typeof attribute === 'undefined' || typeof value === 'undefined') {
         throw new Error("IllegalArgumentException: attribute/value is null or undefined");
       }
 
-      docketObject.name="branch_getOne";
-      docketObject.keyDataAsJSON=`branchObject ${attribute} with value ${value}`;
-      docketObject.details=`branch getOne initiated`;
+      docketObject.name = "branch_getOne";
+      docketObject.keyDataAsJSON = `branchObject ${attribute} with value ${value}`;
+      docketObject.details = `branch getOne initiated`;
       docketClient.postToDocket(docketObject);
-      branchCollection.findOne(attribute,value).then((data)=> {
+      branchCollection.findOne(attribute, value).then((data) => {
         if (data) {
           debug(`branch found ${data}`);
           resolve(data);
@@ -172,13 +179,13 @@ module.exports.getOne=(attribute,value)=> {
           debug(`no branch found by this ${attribute} ${value}`);
           resolve({});
         }
-      }).catch((e)=> {
+      }).catch((e) => {
         debug(`failed to find ${e}`);
       });
     } catch (e) {
-      docketObject.name="branch_ExceptionOngetOne";
-      docketObject.keyDataAsJSON=`branchObject ${attribute} with value ${value}`;
-      docketObject.details=`caught Exception on branch_getOne ${e.message}`;
+      docketObject.name = "branch_ExceptionOngetOne";
+      docketObject.keyDataAsJSON = `branchObject ${attribute} with value ${value}`;
+      docketObject.details = `caught Exception on branch_getOne ${e.message}`;
       docketClient.postToDocket(docketObject);
       debug(`caught exception ${e}`);
       reject(e);
@@ -186,18 +193,18 @@ module.exports.getOne=(attribute,value)=> {
   });
 };
 
-module.exports.getMany=(attribute,value)=> {
-  return new Promise((resolve,reject)=> {
+module.exports.getMany = (attribute, value) => {
+  return new Promise((resolve, reject) => {
     try {
       if (attribute == null || value == null || typeof attribute === 'undefined' || typeof value === 'undefined') {
         throw new Error("IllegalArgumentException: attribute/value is null or undefined");
       }
 
-      docketObject.name="branch_getMany";
-      docketObject.keyDataAsJSON=`branchObject ${attribute} with value ${value}`;
-      docketObject.details=`branch getMany initiated`;
+      docketObject.name = "branch_getMany";
+      docketObject.keyDataAsJSON = `branchObject ${attribute} with value ${value}`;
+      docketObject.details = `branch getMany initiated`;
       docketClient.postToDocket(docketObject);
-      branchCollection.findMany(attribute,value).then((data)=> {
+      branchCollection.findMany(attribute, value).then((data) => {
         if (data) {
           debug(`branch found ${data}`);
           resolve(data);
@@ -206,13 +213,13 @@ module.exports.getMany=(attribute,value)=> {
           debug(`no branch found by this ${attribute} ${value}`);
           resolve([]);
         }
-      }).catch((e)=> {
+      }).catch((e) => {
         debug(`failed to find ${e}`);
       });
     } catch (e) {
-      docketObject.name="branch_ExceptionOngetMany";
-      docketObject.keyDataAsJSON=`branchObject ${attribute} with value ${value}`;
-      docketObject.details=`caught Exception on branch_getMany ${e.message}`;
+      docketObject.name = "branch_ExceptionOngetMany";
+      docketObject.keyDataAsJSON = `branchObject ${attribute} with value ${value}`;
+      docketObject.details = `caught Exception on branch_getMany ${e.message}`;
       docketClient.postToDocket(docketObject);
       debug(`caught exception ${e}`);
       reject(e);
