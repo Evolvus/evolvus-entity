@@ -11,7 +11,7 @@ module.exports.schema = {
       "minLength": 1,
       "maxLength": 64
     },
-    "code": {
+    "entityCode": {
       "type": "string",
       "minLength": 1,
       "maxLength": 50
@@ -21,8 +21,31 @@ module.exports.schema = {
       "minLength": 1,
       "maxLength": 50
     },
+    "level": {
+      "type": "number"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "enable": {
+      "type": "boolean",
+      "default": "true"
+    },
+    "processingStatus": {
+      "type": "string",
+      "enum": ["authorized", "unauthorized", "rejected"]
+    },
+    "createdBy": {
+      "type": "string"
+    },
+    "createdDate": {
+      "type": "string",
+      "format": "date-time"
+    },
     "parent": {
-      "type": "object"
+      "type": "string"
     },
     "contact": {
       "type": "object",
@@ -99,5 +122,5 @@ module.exports.schema = {
       }
     }
   },
-  "required": ["tenantId", "code", "name", "contact"]
+  "required": ["tenantId", "entityCode", "name", "parent", "description", "createdBy", "createdDate", "processingStatus", "level"]
 };

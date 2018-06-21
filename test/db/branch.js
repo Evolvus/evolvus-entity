@@ -27,52 +27,26 @@ describe("db branch testing", () => {
   let object1 = {
     // add a valid branch object
     "tenantId": "IVL",
-    "code": "bc1",
-    "name": "branch1",
-    "contact": {
-      "tenantId": "tenId",
-      "firstName": "Kamala",
-      "middleName": "rani",
-      "lastName": "p",
-      "email": "kamala@gmail.com",
-      "emailVerified": true,
-      "phoneNo": "264123111",
-      "mobileNo": "9878586312",
-      "mobileVerified": true,
-      "faxNumber": "1221",
-      "companyName": "Evolvus",
-      "Address1": "Bangalore",
-      "Address2": "chennai",
-      "city": "Bangalore",
-      "state": "karnataka",
-      "country": "India",
-      "zipCode": "6868"
-    }
+    "entityCode": "entity1",
+    "name": "entity1",
+    "parent": "entityparent1",
+    "description": "bc1 description",
+    "createdBy": "SYSTEM",
+    "createdDate": new Date().toISOString(),
+    "processingStatus": "authorized",
+    "level": 1
   };
   let object2 = {
     // add a valid branch object
     "tenantId": "IVL",
-    "code": "bc2",
-    "name": "branch2",
-    "contact": {
-      "tenantId": "tenId",
-      "firstName": "Kamala",
-      "middleName": "rani",
-      "lastName": "p",
-      "email": "kamala1@gmail.com",
-      "emailVerified": true,
-      "phoneNo": "264123222",
-      "mobileNo": "9808586312",
-      "mobileVerified": true,
-      "faxNumber": "1221",
-      "companyName": "Evolvus",
-      "Address1": "Bangalore",
-      "Address2": "chennai",
-      "city": "Bangalore",
-      "state": "karnataka",
-      "country": "India",
-      "zipCode": "6868"
-    }
+    "entityCode": "entity2",
+    "name": "entity2",
+    "parent": "entityparent2",
+    "description": "bc1 description",
+    "createdBy": "SYSTEM",
+    "createdDate": new Date().toISOString(),
+    "processingStatus": "authorized",
+    "level": 1
   };
 
   describe("testing branch.save", () => {
@@ -91,31 +65,19 @@ describe("db branch testing", () => {
       let testbranchCollection = {
         // add a valid branch object
         "tenantId": "IVL",
-        "code": "bc1",
-        "name": "branch1",
-        "contact": {
-          "tenantId": "tenId",
-          "firstName": "Kamala",
-          "middleName": "rani",
-          "lastName": "p",
-          "email": "kamala@gmail.com",
-          "emailVerified": true,
-          "phoneNo": "264123",
-          "mobileNo": "9878586312",
-          "mobileVerified": true,
-          "faxNumber": "1221",
-          "companyName": "Evolvus",
-          "Address1": "Bangalore",
-          "Address2": "chennai",
-          "city": "Bangalore",
-          "state": "karnataka",
-          "country": "India",
-          "zipCode": "6868"
-        }
+        "entityCode": "entity1",
+        "name": "entity1",
+        "parent": "entityparent1",
+        "description": "entity1 description",
+        "createdBy": "SYSTEM",
+        "createdDate": new Date().toISOString(),
+        "processingStatus": "authorized",
+        "level": 1
       };
       let res = branch.save(testbranchCollection);
       expect(res)
-        .to.eventually.include(testbranchCollection)
+        .to.eventually.have.property('entityCode')
+        .to.eql('entity1')
         .notify(done);
     });
 
@@ -125,7 +87,7 @@ describe("db branch testing", () => {
       let invalidObject = {
         // add a invalid branch object
         "tenantId": "IVL",
-        "name": "branch1",
+        "name": 2346456,
         "contact": {
           "tenantId": "tenId",
           "firstName": "Kamala",
@@ -157,102 +119,50 @@ describe("db branch testing", () => {
     let object1 = {
       // add a valid branch object
       "tenantId": "IVL",
-      "code": "bc1",
-      "name": "branch1",
-      "contact": {
-        "tenantId": "tenId",
-        "firstName": "Kamala",
-        "middleName": "rani",
-        "lastName": "p",
-        "email": "kamala@gmail.com",
-        "emailVerified": true,
-        "phoneNo": "264123",
-        "mobileNo": "9878586312",
-        "mobileVerified": true,
-        "faxNumber": "1221",
-        "companyName": "Evolvus",
-        "Address1": "Bangalore",
-        "Address2": "chennai",
-        "city": "Bangalore",
-        "state": "karnataka",
-        "country": "India",
-        "zipCode": "6868"
-      }
+      "entityCode": "entity1",
+      "name": "entity1",
+      "parent": "entityparent1",
+      "description": "entity1 description",
+      "createdBy": "SYSTEM",
+      "createdDate": new Date().toISOString(),
+      "processingStatus": "authorized",
+      "level": 1
     };
     let object2 = {
       // add a valid branch object
       "tenantId": "IVL",
-      "code": "bc2",
-      "name": "branch2",
-      "contact": {
-        "tenantId": "tenId",
-        "firstName": "Kamala",
-        "middleName": "rani",
-        "lastName": "p",
-        "email": "kamala1@gmail.com",
-        "emailVerified": true,
-        "phoneNo": "264123111",
-        "mobileNo": "9872586312",
-        "mobileVerified": true,
-        "faxNumber": "1221",
-        "companyName": "Evolvus",
-        "Address1": "Bangalore",
-        "Address2": "chennai",
-        "city": "Bangalore",
-        "state": "karnataka",
-        "country": "India",
-        "zipCode": "6868"
-      }
+      "entityCode": "entity2",
+      "name": "entity2",
+      "parent": "entityparent2",
+      "description": "entity2 description",
+      "createdBy": "SYSTEM",
+      "createdDate": new Date().toISOString(),
+      "processingStatus": "authorized",
+      "level": 1
     };
     let object3 = {
       // add a valid branch object
       "tenantId": "IVL",
-      "code": "bc3",
-      "name": "branch3",
-      "contact": {
-        "tenantId": "tenId",
-        "firstName": "Kamala",
-        "middleName": "rani",
-        "lastName": "p",
-        "email": "kamala2@gmail.com",
-        "emailVerified": true,
-        "phoneNo": "264123222",
-        "mobileNo": "9872586312",
-        "mobileVerified": true,
-        "faxNumber": "1221",
-        "companyName": "Evolvus",
-        "Address1": "Bangalore",
-        "Address2": "chennai",
-        "city": "Bangalore",
-        "state": "karnataka",
-        "country": "India",
-        "zipCode": "6868"
-      }
+      "entityCode": "entity3",
+      "name": "entity3",
+      "parent": "entityparent3",
+      "description": "entity3 description",
+      "createdBy": "SYSTEM",
+      "createdDate": new Date().toISOString(),
+      "processingStatus": "authorized",
+      "level": 1
     };
     let object4 = {
       // add a valid branch object
       "tenantId": "IVL",
-      "code": "bc4",
-      "name": "branch4",
-      "contact": {
-        "tenantId": "tenId",
-        "firstName": "Kamala",
-        "middleName": "rani",
-        "lastName": "p",
-        "email": "kamala3@gmail.com",
-        "emailVerified": true,
-        "phoneNo": "264123333",
-        "mobileNo": "9838586312",
-        "mobileVerified": true,
-        "faxNumber": "1221",
-        "companyName": "Evolvus",
-        "Address1": "Bangalore",
-        "Address2": "chennai",
-        "city": "Bangalore",
-        "state": "karnataka",
-        "country": "India",
-        "zipCode": "6868"
-      }
+      "entityCode": "entity4",
+      "name": "entity4",
+      "parent": "entityparent4",
+      "description": "entity4 description",
+      "createdBy": "SYSTEM",
+      "createdDate": new Date().toISOString(),
+      "processingStatus": "authorized",
+      "level": 1
     };
     // 1. Delete all records in the table and insert
     //    4 new records.
@@ -284,8 +194,8 @@ describe("db branch testing", () => {
           expect(docs.length)
             .to.equal(3);
           expect(docs[0])
-            .to.have.property('code')
-            .to.eql('bc1');
+            .to.have.property('entityCode')
+            .to.eql('entity1');
           done();
         }, (err) => {
           done(err);
@@ -304,8 +214,8 @@ describe("db branch testing", () => {
           expect(docs.length)
             .to.equal(4);
           expect(docs[0])
-            .to.have.property('code')
-            .to.eql('bc1');
+            .to.have.property('entityCode')
+            .to.eql('entity1');
           done();
         }, (err) => {
           done(err);
@@ -356,27 +266,14 @@ describe("db branch testing", () => {
     let testObject = {
       //add a valid branch object
       "tenantId": "IVL",
-      "code": "bc1",
-      "name": "branch1",
-      "contact": {
-        "tenantId": "tenId",
-        "firstName": "Kamala",
-        "middleName": "rani",
-        "lastName": "p",
-        "email": "kamala@gmail.com",
-        "emailVerified": true,
-        "phoneNo": "264123",
-        "mobileNo": "9878586312",
-        "mobileVerified": true,
-        "faxNumber": "1221",
-        "companyName": "Evolvus",
-        "Address1": "Bangalore",
-        "Address2": "chennai",
-        "city": "Bangalore",
-        "state": "karnataka",
-        "country": "India",
-        "zipCode": "6868"
-      }
+      "entityCode": "entity1",
+      "name": "entity1",
+      "parent": "entityparent",
+      "description": "entity1 description",
+      "createdBy": "SYSTEM",
+      "createdDate": new Date().toISOString(),
+      "processingStatus": "authorized",
+      "level": 1
     };
     var id;
     beforeEach((done) => {
@@ -393,8 +290,8 @@ describe("db branch testing", () => {
     it("should return branch identified by Id ", (done) => {
       let res = branch.findById(id);
       expect(res)
-        .to.eventually.have.property('code')
-        .to.eql('bc1')
+        .to.eventually.have.property('entityCode')
+        .to.eql('entity1')
         .notify(done);
     });
 
@@ -411,52 +308,26 @@ describe("db branch testing", () => {
     let object1 = {
       // add a valid branch object
       "tenantId": "IVL",
-      "code": "bc1",
-      "name": "branch1",
-      "contact": {
-        "tenantId": "tenId",
-        "firstName": "Kamala",
-        "middleName": "rani",
-        "lastName": "p",
-        "email": "kamala@gmail.com",
-        "emailVerified": true,
-        "phoneNo": "264123",
-        "mobileNo": "9878586312",
-        "mobileVerified": true,
-        "faxNumber": "1221",
-        "companyName": "Evolvus",
-        "Address1": "Bangalore",
-        "Address2": "chennai",
-        "city": "Bangalore",
-        "state": "karnataka",
-        "country": "India",
-        "zipCode": "6868"
-      }
+      "entityCode": "entity1",
+      "name": "entity1",
+      "parent": "entityparent1",
+      "description": "entity1 description",
+      "createdBy": "SYSTEM",
+      "createdDate": new Date().toISOString(),
+      "processingStatus": "authorized",
+      "level": 1
     };
     let object2 = {
       // add a valid branch object
       "tenantId": "IVL",
-      "code": "bc2",
-      "name": "branch2",
-      "contact": {
-        "tenantId": "tenId",
-        "firstName": "Kamala",
-        "middleName": "rani",
-        "lastName": "p",
-        "email": "kamala1@gmail.com",
-        "emailVerified": true,
-        "phoneNo": "264123111",
-        "mobileNo": "9871586312",
-        "mobileVerified": true,
-        "faxNumber": "1221",
-        "companyName": "Evolvus",
-        "Address1": "Bangalore",
-        "Address2": "chennai",
-        "city": "Bangalore",
-        "state": "karnataka",
-        "country": "India",
-        "zipCode": "6868"
-      }
+      "entityCode": "entity2",
+      "name": "entity2",
+      "parent": "entityparent2",
+      "description": "entity2 description",
+      "createdBy": "SYSTEM",
+      "createdDate": new Date().toISOString(),
+      "processingStatus": "authorized",
+      "level": 1
     };
     // Delete all records, insert two record
     // 1. Query by one attribute and it should return one branch
@@ -478,17 +349,17 @@ describe("db branch testing", () => {
 
     it("should return object for valid attribute value", (done) => {
       // take one valid attribute and its value
-      let attributename = "code";
-      let attributeValue = "bc1";
+      let attributename = "entityCode";
+      let attributeValue = "entity1";
       let res = branch.findOne(attributename, attributeValue);
       expect(res)
-        .to.eventually.have.property('code')
-        .to.eql('bc1')
+        .to.eventually.have.property('entityCode')
+        .to.eql('entity1')
         .notify(done);
     });
 
     it("should return null as no branch is identified by this attribute ", (done) => {
-      let res = branch.findOne(`code`, `dfgt`);
+      let res = branch.findOne(`entityCode`, `dfgt`);
       expect(res)
         .to.eventually.to.eql(null)
         .notify(done);
@@ -502,52 +373,26 @@ describe("db branch testing", () => {
     let branch1 = {
       //add valid object
       "tenantId": "IVL",
-      "code": "bc1",
-      "name": "branch1",
-      "contact": {
-        "tenantId": "tenId",
-        "firstName": "Kamala",
-        "middleName": "rani",
-        "lastName": "p",
-        "email": "kamala@gmail.com",
-        "emailVerified": true,
-        "phoneNo": "264123",
-        "mobileNo": "9878586312",
-        "mobileVerified": true,
-        "faxNumber": "1221",
-        "companyName": "Evolvus",
-        "Address1": "Bangalore",
-        "Address2": "chennai",
-        "city": "Bangalore",
-        "state": "karnataka",
-        "country": "India",
-        "zipCode": "6868"
-      }
+      "entityCode": "entity1",
+      "name": "entity1",
+      "parent": "entityparent1",
+      "description": "entity1 description",
+      "createdBy": "SYSTEM",
+      "createdDate": new Date().toISOString(),
+      "processingStatus": "authorized",
+      "level": 1
     };
     let branch2 = {
       //add valid object with one attribute value same as "branch1"
       "tenantId": "IVL",
-      "code": "bc2",
-      "name": "branch2",
-      "contact": {
-        "tenantId": "tenId",
-        "firstName": "Kamala",
-        "middleName": "rani",
-        "lastName": "p",
-        "email": "kamala1@gmail.com",
-        "emailVerified": true,
-        "phoneNo": "264123111",
-        "mobileNo": "9871586312",
-        "mobileVerified": true,
-        "faxNumber": "1221",
-        "companyName": "Evolvus",
-        "Address1": "Bangalore",
-        "Address2": "chennai",
-        "city": "Bangalore",
-        "state": "karnataka",
-        "country": "India",
-        "zipCode": "6868"
-      }
+      "entityCode": "entity2",
+      "name": "entity2",
+      "parent": "entityparent2",
+      "description": "entity2 description",
+      "createdBy": "SYSTEM",
+      "createdDate": new Date().toISOString(),
+      "processingStatus": "authorized",
+      "level": 1
     };
     // delete all records and insert two branchs
     beforeEach((done) => {
@@ -565,8 +410,8 @@ describe("db branch testing", () => {
 
     it("should return array of objects for valid attribute value", (done) => {
       // take one valid attribute and its value
-      let attributename = "code";
-      let attributeValue = "bc1";
+      let attributename = "entityCode";
+      let attributeValue = "entity1";
       let res = branch.findMany(attributename, attributeValue);
       expect(res).to.eventually.be.a("array");
       //enter proper length according to input attribute
@@ -575,7 +420,7 @@ describe("db branch testing", () => {
     });
 
     it("should return empty array as no branch is identified by this attribute ", (done) => {
-      let res = branch.findMany(`code`, `sfgdfg`);
+      let res = branch.findMany(`entityCode`, `sfgdfg`);
       expect(res)
         .to.eventually.to.eql([])
         .notify(done);

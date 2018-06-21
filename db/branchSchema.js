@@ -14,26 +14,77 @@ var branchSchema = new mongoose.Schema({
     minLength: 1,
     maxLength: 64
   },
-  code: {
+  entityCode: {
     type: String,
     minLength: 1,
     maxLength: 50,
     required: true,
-    unique: true
+    unique: true,
+    validate: {
+      validator: function(v) {
+        return /^[a-zA-Z\-0-9]+$/.test(v);
+      },
+      message: "{PATH} can contain only alphabets and numbers"
+    }
   },
   name: {
     type: String,
     minLength: 1,
     maxLength: 50,
+    required: true,
+    unique: true,
+    validate: {
+      validator: function(v) {
+        return /^[a-zA-Z\-0-9]+$/.test(v);
+      },
+      message: "{PATH} can contain only alphabets and numbers"
+    }
+  },
+  level: {
+    type: Number,
+    required: true
+  },
+  description: {
+    type: String,
+    minLength: 1,
+    maxLength: 255,
+    required: true,
+    validate: {
+      validator: function(v) {
+        return /^[a-zA-Z\-0-9 ]+$/.test(v);
+      },
+      message: "{PATH} can contain only alphabets and numbers"
+    }
+  },
+  enable: {
+    type: Boolean,
+    default: true
+  },
+  processingStatus: {
+    type: String,
+    required: true
+  },
+  createdBy: {
+    type: String,
+    required: true
+  },
+  createdDate: {
+    type: Date,
     required: true
   },
   parent: {
-    type: Object
+    type: String,
+    required: true,
+    validate: {
+      validator: function(v) {
+        return /^[a-zA-Z\-0-9]+$/.test(v);
+      },
+      message: "{PATH} can contain only alphabets and numbers"
+    }
   },
   contact: {
     type: Object,
-    ref: 'Contact',
-    required: true
+    ref: 'Contact'
   }
 });
 
