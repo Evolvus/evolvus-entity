@@ -34,8 +34,7 @@ module.exports.schema = {
       "default": "true"
     },
     "processingStatus": {
-      "type": "string",
-      "enum": ["authorized", "unauthorized", "rejected"]
+      "type": "string"
     },
     "createdBy": {
       "type": "string"
