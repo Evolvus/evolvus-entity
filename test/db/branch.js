@@ -5,7 +5,7 @@ const chaiAsPromised = require("chai-as-promised");
 const expect = chai.expect;
 const branch = require("../../db/branch");
 
-var MONGO_DB_URL = process.env.MONGO_DB_URL || "mongodb://localhost/TestbranchCollection";
+var MONGO_DB_URL = process.env.MONGO_DB_URL || "mongodb://10.10.69.204:27017/TestPlatform_Dev";
 
 chai.use(chaiAsPromised);
 
