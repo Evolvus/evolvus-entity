@@ -63,19 +63,17 @@ module.exports.save = (branchObject) => {
       debug("validation status: ", JSON.stringify(res));
       if (!res.valid) {
         reject(res.errors);
+      } else {
+        // if the object is valid, save the object to the database
+        branchCollection.save(branchObject).then((result) => {
+          debug(`saved successfully ${result}`);
+          resolve(result);
+        }).catch((e) => {
+          debug(`failed to save with an error: ${e}`);
+          reject(e);
+        });
       }
-
       // Other validations here
-
-
-      // if the object is valid, save the object to the database
-      branchCollection.save(branchObject).then((result) => {
-        debug(`saved successfully ${result}`);
-        resolve(result);
-      }).catch((e) => {
-        debug(`failed to save with an error: ${e}`);
-        reject(e);
-      });
     } catch (e) {
       docketObject.name = "branch_ExceptionOnSave";
       docketObject.keyDataAsJSON = JSON.stringify(branchObject);
