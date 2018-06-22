@@ -136,6 +136,26 @@ module.exports.findById = (id) => {
   });
 };
 
+// Filters entity collection by entityDetails
+// Returns a promise
+
+module.exports.filterByBranchDetails = (filterQuery) => {
+  return new Promise((resolve, reject) => {
+    try {
+      branchCollection.find(filterQuery).then((docs) => {
+        debug(`Documents filterd by ${filterQuery} are ${docs}`);
+        resolve(docs);
+      }).catch((e) => {
+        debug(`Failed to filter due to ${e}`);
+        reject(e);
+      });
+    } catch (e) {
+      debug(`Caught Exception ${e}`);
+      reject(e);
+    }
+  });
+};
+
 // Deletes all the entries of the collection.
 // To be used by test only
 module.exports.deleteAll = () => {

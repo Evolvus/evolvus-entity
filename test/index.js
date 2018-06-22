@@ -607,4 +607,85 @@ describe('branch model validation', () => {
       }
     });
   });
+
+  describe("testing filterByBranchDetails", () => {
+    let object1 = {
+        //add one valid branch object here
+        "tenantId": "IVL",
+        "entityCode": "entity1",
+        "name": "entity",
+        "parent": "entityparent1",
+        "description": "entity1 description",
+        "createdBy": "SYSTEM",
+        "createdDate": new Date().toISOString(),
+        "processingStatus": "authorized",
+        "level": 1
+      },
+      object2 = {
+        //add one more valid branch object here
+        "tenantId": "IVL",
+        "entityCode": "entity2",
+        "name": "entity",
+        "parent": "entityparent2",
+        "description": "entity2 description",
+        "createdBy": "SYSTEM",
+        "createdDate": new Date().toISOString(),
+        "processingStatus": "authorized",
+        "level": 1
+      };
+    beforeEach((done) => {
+      db.deleteAll()
+        .then((res) => {
+          db.save(object1)
+            .then((res) => {
+              db.save(object2)
+                .then((res) => {
+                  done();
+                });
+            });
+        });
+    });
+
+    //Query by processing status as authorized, enable as true and name as Branch
+    // It should return array with only one object
+    it("should return filterd values based on query ", (done) => {
+      var res = branch.filterByBranchDetails({
+        processingStatus: 'authorized',
+        name: 'entity',
+        enable: true
+      });
+      expect(res).to.eventually.be.a("array")
+        .to.have.length(2)
+        .notify(done);
+    });
+
+    //Query by enable as false
+    //It should return empty array as there are no roles with enable as false
+    it("should return empty array as there are no roles matching the query parameter ", (done) => {
+      var res = branch.filterByBranchDetails({
+        enable: false
+      });
+      expect(res).to.eventually.be.a("array")
+        .to.have.length(0)
+        .notify(done);
+    });
+
+
+    it("should throw IllegalArgumentException for null query parameter ", (done) => {
+      let res = branch.filterByBranchDetails(null);
+      expect(res)
+        .to.eventually.to.be.rejectedWith("IllegalArgumentException")
+        .notify(done);
+    });
+
+    it("should throw IllegalArgumentException for undefined query parameter ", (done) => {
+      let undefinedQuery;
+      let res = branch.filterByBranchDetails(undefinedQuery);
+      expect(res)
+        .to.eventually.to.be.rejectedWith("IllegalArgumentException")
+        .notify(done);
+    });
+
+  });
+
 });

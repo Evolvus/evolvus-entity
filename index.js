@@ -224,3 +224,35 @@ module.exports.getMany = (attribute, value) => {
     }
   });
 };
+
+module.exports.filterByBranchDetails = (filterQuery) => {
+  return new Promise((resolve, reject) => {
+    try {
+      if (filterQuery == null) {
+        throw new Error(`IllegalArgumentException: filterQuery is ${filterQuery}`);
+      }
+      docketObject.name = "entity_filterByBranchDetails";
+      docketObject.keyDataAsJSON = `Filter the entity collection by query ${filterQuery}`;
+      docketObject.details = `entity_filterByBranchDetails initiated`;
+      docketClient.postToDocket(docketObject);
+      branchCollection.filterByBranchDetails(filterQuery).then((filteredData) => {
+        if (filteredData.length > 0) {
+          debug(`filtered Data is ${filteredData}`);
+          resolve(filteredData);
+        } else {
+          debug(`No data available for filter query ${filterQuery}`);
+          resolve([]);
+        }
+      }).catch((e) => {
+        debug(`failed to find ${e}`);
+      });
+    } catch (e) {
+      docketObject.name = "entity_ExceptionOnFilterByBranchDetails";
+      docketObject.keyDataAsJSON = `Filter the entity collection by query ${filterQuery}`;
+      docketObject.details = `caught Exception on entity_filterByBranchDetails ${e.message}`;
+      docketClient.postToDocket(docketObject);
+      debug(`caught exception ${e}`);
+      reject(e);
+    }
+  });
+};

@@ -5,7 +5,7 @@ const chaiAsPromised = require("chai-as-promised");
 const expect = chai.expect;
 const branch = require("../../db/branch");
 
-var MONGO_DB_URL = process.env.MONGO_DB_URL || "mongodb://10.10.69.204:27017/TestPlatform_Dev";
+var MONGO_DB_URL = process.env.MONGO_DB_URL || "mongodb://10.10.69.204/TestPlatform_Dev";
 
 chai.use(chaiAsPromised);
 
@@ -28,7 +28,7 @@ describe("db branch testing", () => {
     // add a valid branch object
     "tenantId": "IVL",
     "entityCode": "entity1",
-    "name": "entity1",
+    "name": "entity",
     "parent": "entityparent1",
     "description": "bc1 description",
     "createdBy": "SYSTEM",
@@ -40,7 +40,7 @@ describe("db branch testing", () => {
     // add a valid branch object
     "tenantId": "IVL",
     "entityCode": "entity2",
-    "name": "entity2",
+    "name": "entity",
     "parent": "entityparent2",
     "description": "bc1 description",
     "createdBy": "SYSTEM",
@@ -167,10 +167,9 @@ describe("db branch testing", () => {
     // 1. Delete all records in the table and insert
     //    4 new records.
     // find -should return an array of size equal to value of limit with the
-    // roleMenuItemMaps.
-    // Caveat - the order of the roleMenuItemMaps fetched is indeterminate
+    // entities
 
-    // delete all records and insert four roleMenuItemMaps
+    // delete all records and insert four entities
     beforeEach((done) => {
       branch.deleteAll().then(() => {
         branch.save(object1).then((res) => {
@@ -423,6 +422,44 @@ describe("db branch testing", () => {
       let res = branch.findMany(`entityCode`, `sfgdfg`);
       expect(res)
         .to.eventually.to.eql([])
+        .notify(done);
+    });
+  });
+
+
+  describe("Testing filter by Branch details", () => {
+
+    beforeEach((done) => {
+      branch.deleteAll().then(() => {
+        branch.save(object1).then((result) => {
+          branch.save(object2).then((result) => {
+            done();
+          });
+        });
+      });
+    });
+
+    //Query by processing status as unauthorized, activationStatus as active and applicationCode as CDA
+    // It should return array of 2 objects
+    it("should return filterd values based on query ", (done) => {
+      var res = branch.filterByBranchDetails({
+        processingStatus: 'authorized',
+        name: 'entity',
+        enable: true
+      });
+      expect(res).to.eventually.be.a("array")
+        .to.have.length(2)
+        .notify(done);
+    });
+
+    //Query by processing status as authorized
+    //It should return empty array as there are no entities with processing status as authorized
+    it("should return empty array as there are no entities matching the query parameter ", (done) => {
+      var res = branch.filterByBranchDetails({
+        processingStatus: 'unauthorized'
+      });
+      expect(res).to.eventually.be.a("array")
+        .to.have.length(0)
         .notify(done);
     });
   });
