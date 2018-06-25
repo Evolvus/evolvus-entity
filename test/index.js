@@ -15,7 +15,7 @@ const expect = chai.expect;
 chai.use(chaiAsPromised);
 
 const branch = require("../index");
-const db = require("../db/branch");
+const db = require("../db/entity");
 
 describe('branch model validation', () => {
   let branchObject = {
@@ -28,7 +28,7 @@ describe('branch model validation', () => {
     "createdBy": "SYSTEM",
     "createdDate": new Date().toISOString(),
     "processingStatus": "authorized",
-    "level": 1
+    "accessLevel": 1
   };
 
   let invalidObject = {
@@ -158,36 +158,36 @@ describe('branch model validation', () => {
         //add one valid branch object here
         "tenantId": "IVL",
         "entityCode": "entity1",
-        "name": "entity1",
+        "name": "entity",
         "parent": "entityparent1",
         "description": "entity1 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
         "processingStatus": "authorized",
-        "level": 1
+        "accessLevel": 1
       },
       object2 = {
         //add one more valid branch object here
         "tenantId": "IVL",
         "entityCode": "entity2",
-        "name": "entity2",
+        "name": "entity",
         "parent": "entityparent2",
         "description": "entity2 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
         "processingStatus": "authorized",
-        "level": 1
+        "accessLevel": 1
       };
     let object3 = {
       "tenantId": "IVL",
       "entityCode": "entity3",
-      "name": "entity3",
+      "name": "entity",
       "parent": "entityparent3",
       "description": "entity3 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
       "processingStatus": "authorized",
-      "level": 1
+      "accessLevel": 1
     };
     beforeEach((done) => {
       db.deleteAll().then((res) => {
@@ -203,7 +203,10 @@ describe('branch model validation', () => {
 
     it('should return limited records as specified by the limit parameter', (done) => {
       try {
-        let res = branch.getAll(2);
+        let orderBy = {
+          name: 1
+        };
+        let res = branch.getAll('IVL', 'entity', 0, 2, orderBy);
         expect(res)
           .to.be.fulfilled.then((docs) => {
             expect(docs)
@@ -217,9 +220,12 @@ describe('branch model validation', () => {
       }
     });
 
-    it('should return all records if limit is -1', (done) => {
+    it('should return all records if limit is null or undefined', (done) => {
       try {
-        let res = branch.getAll(-1);
+        let orderBy = {
+          name: 1
+        };
+        let res = branch.getAll('IVL', 'entity', 0, null, orderBy);
         expect(res)
           .to.be.fulfilled.then((docs) => {
             expect(docs)
@@ -233,24 +239,43 @@ describe('branch model validation', () => {
       }
     });
 
-    it('should throw IllegalArgumentException for null value of limit', (done) => {
+    it('should return records sorted by entity name if orderBy is null or undefined', (done) => {
       try {
-        let res = branch.getAll(null);
+        let res = branch.getAll('IVL', 'entity', 0, 2, null);
         expect(res)
-          .to.be.rejectedWith("IllegalArgumentException")
-          .notify(done);
+          .to.be.fulfilled.then((docs) => {
+            expect(docs)
+              .to.be.a('array');
+            expect(docs.length)
+              .to.equal(2);
+            expect(docs[0])
+              .to.have.property('name')
+              .to.eql('entity');
+            done();
+          });
       } catch (e) {
         expect.fail(e, null, `exception: ${e}`);
       }
     });
 
-    it('should throw IllegalArgumentException for undefined value of limit', (done) => {
+
+    it('should return records sorted by entity name', (done) => {
       try {
-        let undefinedLimit;
-        let res = branch.getAll(undefinedLimit);
+        let orderBy = {
+          name: -1
+        };
+        let res = branch.getAll('IVL', 'entity', 0, 2, orderBy);
         expect(res)
-          .to.be.rejectedWith("IllegalArgumentException")
-          .notify(done);
+          .to.be.fulfilled.then((docs) => {
+            expect(docs)
+              .to.be.a('array');
+            expect(docs.length)
+              .to.equal(2);
+            expect(docs[0])
+              .to.have.property('name')
+              .to.eql('entity');
+            done();
+          });
       } catch (e) {
         expect.fail(e, null, `exception: ${e}`);
       }
@@ -268,25 +293,7 @@ describe('branch model validation', () => {
 
     it('should return empty array when limit is -1', (done) => {
       try {
-        let res = branch.getAll(-1);
-        expect(res)
-          .to.be.fulfilled.then((docs) => {
-            expect(docs)
-              .to.be.a('array');
-            expect(docs.length)
-              .to.equal(0);
-            expect(docs)
-              .to.eql([]);
-            done();
-          });
-      } catch (e) {
-        expect.fail(e, null, `exception: ${e}`);
-      }
-    });
-
-    it('should return empty array when limit is positive value ', (done) => {
-      try {
-        let res = branch.getAll(2);
+        let res = branch.getAll('IVL', 'entity', 0, 2, null);
         expect(res)
           .to.be.fulfilled.then((docs) => {
             expect(docs)
@@ -313,7 +320,7 @@ describe('branch model validation', () => {
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
       "processingStatus": "authorized",
-      "level": 1
+      "accessLevel": 1
     };
     // Insert one record , get its id
     // 1. Query by this id and it should return one branch object
@@ -397,7 +404,7 @@ describe('branch model validation', () => {
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
         "processingStatus": "authorized",
-        "level": 1
+        "accessLevel": 1
       },
       object2 = {
         //add one more valid branch object here
@@ -409,7 +416,7 @@ describe('branch model validation', () => {
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
         "processingStatus": "authorized",
-        "level": 1
+        "accessLevel": 1
       };
     beforeEach((done) => {
       db.deleteAll().then((res) => {
@@ -509,7 +516,7 @@ describe('branch model validation', () => {
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
         "processingStatus": "authorized",
-        "level": 1
+        "accessLevel": 1
       },
       object2 = {
         //add one more valid branch object here
@@ -521,7 +528,7 @@ describe('branch model validation', () => {
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
         "processingStatus": "authorized",
-        "level": 1
+        "accessLevel": 1
       };
     beforeEach((done) => {
       db.deleteAll().then((res) => {
@@ -608,7 +615,7 @@ describe('branch model validation', () => {
     });
   });
 
-  describe("testing filterByBranchDetails", () => {
+  describe("testing filterByEntityDetails", () => {
     let object1 = {
         //add one valid branch object here
         "tenantId": "IVL",
@@ -619,7 +626,7 @@ describe('branch model validation', () => {
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
         "processingStatus": "authorized",
-        "level": 1
+        "accessLevel": 1
       },
       object2 = {
         //add one more valid branch object here
@@ -631,7 +638,7 @@ describe('branch model validation', () => {
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
         "processingStatus": "authorized",
-        "level": 1
+        "accessLevel": 1
       };
     beforeEach((done) => {
       db.deleteAll()
@@ -649,10 +656,10 @@ describe('branch model validation', () => {
     //Query by processing status as authorized, enable as true and name as Branch
     // It should return array with only one object
     it("should return filterd values based on query ", (done) => {
-      var res = branch.filterByBranchDetails({
+      var res = branch.filterByEntityDetails({
         processingStatus: 'authorized',
         name: 'entity',
-        enable: true
+        enableFlag: true
       });
       expect(res).to.eventually.be.a("array")
         .to.have.length(2)
@@ -662,7 +669,7 @@ describe('branch model validation', () => {
     //Query by enable as false
     //It should return empty array as there are no roles with enable as false
     it("should return empty array as there are no roles matching the query parameter ", (done) => {
-      var res = branch.filterByBranchDetails({
+      var res = branch.filterByEntityDetails({
         enable: false
       });
       expect(res).to.eventually.be.a("array")
@@ -672,7 +679,7 @@ describe('branch model validation', () => {
 
 
     it("should throw IllegalArgumentException for null query parameter ", (done) => {
-      let res = branch.filterByBranchDetails(null);
+      let res = branch.filterByEntityDetails(null);
       expect(res)
         .to.eventually.to.be.rejectedWith("IllegalArgumentException")
         .notify(done);
@@ -680,7 +687,7 @@ describe('branch model validation', () => {
 
     it("should throw IllegalArgumentException for undefined query parameter ", (done) => {
       let undefinedQuery;
-      let res = branch.filterByBranchDetails(undefinedQuery);
+      let res = branch.filterByEntityDetails(undefinedQuery);
       expect(res)
         .to.eventually.to.be.rejectedWith("IllegalArgumentException")
         .notify(done);
