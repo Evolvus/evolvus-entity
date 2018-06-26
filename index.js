@@ -88,7 +88,7 @@ module.exports.save = (entityObject) => {
 // List all the objects in the database
 // makes sense to return on a limited number
 // (what if there are 1000000 records in the collection)
-module.exports.getAll = (tenantId, name, accessLevel, limit, orderBy) => {
+module.exports.getAll = (tenantId, entityCode, accessLevel, limit, orderBy) => {
   return new Promise((resolve, reject) => {
     try {
       if (limit == null) {
@@ -104,7 +104,7 @@ module.exports.getAll = (tenantId, name, accessLevel, limit, orderBy) => {
       docketObject.details = `entity getAll method`;
       docketClient.postToDocket(docketObject);
 
-      entityCollection.findAll(tenantId, name, accessLevel, limit, orderBy).then((docs) => {
+      entityCollection.findAll(tenantId, entityCode, accessLevel, limit, orderBy).then((docs) => {
         debug(`entity(s) stored in the database are ${docs}`);
         resolve(docs);
       }).catch((e) => {
@@ -245,7 +245,7 @@ module.exports.filterByEntityDetails = (filterQuery, orderBy) => {
           queryObject.parent = filterQuery.parent;
         }
         if (filterQuery.enableFlag != null && (filterQuery.enableFlag != 'undefined')) {
-          queryObject.enableFlags = filterQuery.enableFlag;
+          queryObject.enableFlag = filterQuery.enableFlag;
         }
         if (filterQuery.processingStatus != null && (filterQuery.processingStatus != 'undefined')) {
           queryObject.processingStatus = filterQuery.processingStatus;
@@ -310,37 +310,3 @@ module.exports.update = (id, update) => {
     }
   });
 };
-
-// module.exports.filterByCondition = (filterQuery) => {
-//   return new Promise((resolve, reject) => {
-//     try {
-//       if (filterQuery == null) {
-//         throw new Error(`IllegalArgumentException: filterQuery is ${filterQuery}`);
-//       }
-//
-//       docketObject.name = "branch_filterByCondition";
-//       docketObject.keyDataAsJSON = `branchObject ${filterQuery}`;
-//       docketObject.details = `branch filterByCondition initiated`;
-//       docketClient.postToDocket(docketObject);
-//       entityCollection.filterByCondition(filterQuery).then((data) => {
-//         if (data) {
-//           debug(`branch found ${data}`);
-//           resolve(data);
-//         } else {
-//           // return empty object in place of null
-//           debug(`no branch found by this ${filterQuery}`);
-//           resolve([]);
-//         }
-//       }).catch((e) => {
-//         debug(`failed to find ${e}`);
-//       });
-//     } catch (e) {
-//       docketObject.name = "branch_ExceptionOnfilterByCondition";
-//       docketObject.keyDataAsJSON = `branchObject ${filterQuery}}`;
-//       docketObject.details = `caught Exception on branch_filterByCondition ${e.message}`;
-//       docketClient.postToDocket(docketObject);
-//       debug(`caught exception ${e}`);
-//       reject(e);
-//     }
-//   });
-// };

@@ -157,8 +157,8 @@ describe('branch model validation', () => {
     let object1 = {
         //add one valid branch object here
         "tenantId": "IVL",
-        "entityCode": "entity1",
-        "name": "entity",
+        "entityCode": "entity",
+        "name": "entity1",
         "parent": "entityparent1",
         "description": "entity1 description",
         "createdBy": "SYSTEM",
@@ -169,25 +169,25 @@ describe('branch model validation', () => {
       object2 = {
         //add one more valid branch object here
         "tenantId": "IVL",
-        "entityCode": "entity2",
-        "name": "entity",
+        "entityCode": "entity",
+        "name": "entity2",
         "parent": "entityparent2",
         "description": "entity2 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
         "entityId": "abc13",
-        "accessLevel": "1"
+        "accessLevel": "2"
       };
     let object3 = {
       "tenantId": "IVL",
-      "entityCode": "entity3",
-      "name": "entity",
+      "entityCode": "entity",
+      "name": "entity3",
       "parent": "entityparent3",
       "description": "entity3 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
       "entityId": "abc14",
-      "accessLevel": "1"
+      "accessLevel": "3"
     };
     beforeEach((done) => {
       db.deleteAll().then((res) => {
@@ -206,7 +206,7 @@ describe('branch model validation', () => {
         let orderBy = {
           name: 1
         };
-        let res = branch.getAll('IVL', 'entity', 0, 2, orderBy);
+        let res = branch.getAll('IVL', 'entity', "1", 2, orderBy);
         expect(res)
           .to.be.fulfilled.then((docs) => {
             expect(docs)
@@ -225,7 +225,7 @@ describe('branch model validation', () => {
         let orderBy = {
           name: 1
         };
-        let res = branch.getAll('IVL', 'entity', 0, null, orderBy);
+        let res = branch.getAll('IVL', 'entity', "1", null, orderBy);
         expect(res)
           .to.be.fulfilled.then((docs) => {
             expect(docs)
@@ -241,7 +241,7 @@ describe('branch model validation', () => {
 
     it('should return records sorted by entity name if orderBy is null or undefined', (done) => {
       try {
-        let res = branch.getAll('IVL', 'entity', 0, 2, null);
+        let res = branch.getAll('IVL', 'entity', "1", 2, null);
         expect(res)
           .to.be.fulfilled.then((docs) => {
             expect(docs)
@@ -249,7 +249,7 @@ describe('branch model validation', () => {
             expect(docs.length)
               .to.equal(2);
             expect(docs[0])
-              .to.have.property('name')
+              .to.have.property('entityCode')
               .to.eql('entity');
             done();
           });
@@ -264,7 +264,7 @@ describe('branch model validation', () => {
         let orderBy = {
           name: -1
         };
-        let res = branch.getAll('IVL', 'entity', 0, 2, orderBy);
+        let res = branch.getAll('IVL', 'entity', "1", 2, orderBy);
         expect(res)
           .to.be.fulfilled.then((docs) => {
             expect(docs)
@@ -272,7 +272,7 @@ describe('branch model validation', () => {
             expect(docs.length)
               .to.equal(2);
             expect(docs[0])
-              .to.have.property('name')
+              .to.have.property('entityCode')
               .to.eql('entity');
             done();
           });
@@ -293,7 +293,7 @@ describe('branch model validation', () => {
 
     it('should return empty array when limit is -1', (done) => {
       try {
-        let res = branch.getAll('IVL', 'entity', 0, 2, null);
+        let res = branch.getAll('IVL', 'entity', "1", 2, null);
         expect(res)
           .to.be.fulfilled.then((docs) => {
             expect(docs)
@@ -621,7 +621,7 @@ describe('branch model validation', () => {
         //add one valid role object here
         "tenantId": "IVL",
         "enabledFlag": true,
-        "entityCode": "entity12",
+        "entityCode": "entity",
         "name": "entity1",
         "parent": "entityparent1",
         "description": "entity1 description",
@@ -634,7 +634,7 @@ describe('branch model validation', () => {
       object2 = {
         //add one more valid role object here
         "tenantId": "IVL",
-        "entityCode": "entity2",
+        "entityCode": "entity",
         "name": "entity2",
         "parent": "entityparent2",
         "description": "entity2 description",
@@ -704,8 +704,8 @@ describe('branch model validation', () => {
     let object1 = {
         //add one valid branch object here
         "tenantId": "IVL",
-        "entityCode": "entity1",
-        "name": "entity",
+        "entityCode": "entity",
+        "name": "entity1",
         "parent": "entityparent1",
         "description": "entity1 description",
         "createdBy": "SYSTEM",
@@ -716,8 +716,8 @@ describe('branch model validation', () => {
       object2 = {
         //add one more valid branch object here
         "tenantId": "IVL",
-        "entityCode": "entity2",
-        "name": "entity",
+        "entityCode": "entity",
+        "name": "entity2",
         "parent": "entityparent2",
         "description": "entity2 description",
         "createdBy": "SYSTEM",
