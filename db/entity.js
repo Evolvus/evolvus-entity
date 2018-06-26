@@ -197,6 +197,46 @@ module.exports.update = (id, update) => {
   });
 };
 
+//filter by conditions
+module.exports.filterByCondition = (credentials) => {
+  return new Promise((resolve, reject) => {
+    try {
+
+      let Obj = {};
+      if (credentials.parent != undefined) {
+        Obj.parent = credentials.parent;
+      }
+      if (credentials.enableFlag != undefined) {
+        Obj.enableFlag = credentials.enableFlag;
+      }
+      if (credentials.processingStatus != undefined) {
+        Obj.processingStatus = credentials.processingStatus;
+      }
+
+      entityCollection.find(Obj)
+        .then((res) => {
+          debug("authentication successful: ", res);
+          resolve(res);
+        }, (err) => {
+          debug(`Invalid Credentials. ${err}`);
+
+          reject(err);
+
+        })
+        .catch((e) => {
+          debug(`exception on authenticating user: ${e}`);
+
+          reject(e);
+
+        });
+
+    } catch (e) {
+      debug(`caught exception: ${e}`);
+      reject(e);
+    }
+  });
+};
+
 // Deletes all the entries of the collection.
 // To be used by test only
 module.exports.deleteAll = () => {

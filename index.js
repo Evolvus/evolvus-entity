@@ -263,29 +263,63 @@ module.exports.filterByEntityDetails = (filterQuery) => {
 };
 
 module.exports.update = (id, update) => {
-   return new Promise((resolve, reject) => {
-     try {
-       if (id == null || update == null) {
-         throw new Error("IllegalArgumentException:id/update is null or undefined");
-       }
-       docketObject.name = "entity_update";
-       docketObject.keyDataAsJSON = `entityObject ${id} to be updated with  ${update}`;
-       docketObject.details = `entity update initiated`;
-       docketClient.postToDocket(docketObject);
-       entityCollection.update(id, update).then((resp) => {
-         debug("updated successfully", resp);
-         resolve(resp);
-       }).catch((error) => {
-         debug(`failed to update ${error}`);
-         reject(error);
-       });
-     } catch (e) {
-       docketObject.name = "entity_ExceptionOnUpdate";
-       docketObject.keyDataAsJSON = `entityObject ${id} to be updated with  ${update}`;
-       docketObject.details = `caught Exception on entity_update ${e.message}`;
-       docketClient.postToDocket(docketObject);
-       debug(`caught exception ${e}`);
-       reject(e);
-     }
-   });
- };
+  return new Promise((resolve, reject) => {
+    try {
+      if (id == null || update == null) {
+        throw new Error("IllegalArgumentException:id/update is null or undefined");
+      }
+      docketObject.name = "entity_update";
+      docketObject.keyDataAsJSON = `entityObject ${id} to be updated with  ${update}`;
+      docketObject.details = `entity update initiated`;
+      docketClient.postToDocket(docketObject);
+      entityCollection.update(id, update).then((resp) => {
+        debug("updated successfully", resp);
+        resolve(resp);
+      }).catch((error) => {
+        debug(`failed to update ${error}`);
+        reject(error);
+      });
+    } catch (e) {
+      docketObject.name = "entity_ExceptionOnUpdate";
+      docketObject.keyDataAsJSON = `entityObject ${id} to be updated with  ${update}`;
+      docketObject.details = `caught Exception on entity_update ${e.message}`;
+      docketClient.postToDocket(docketObject);
+      debug(`caught exception ${e}`);
+      reject(e);
+    }
+  });
+};
+
+module.exports.filterByCondition = (filterQuery) => {
+  return new Promise((resolve, reject) => {
+    try {
+      if (filterQuery == null) {
+        throw new Error(`IllegalArgumentException: filterQuery is ${filterQuery}`);
+      }
+
+      docketObject.name = "branch_filterByCondition";
+      docketObject.keyDataAsJSON = `branchObject ${filterQuery}`;
+      docketObject.details = `branch filterByCondition initiated`;
+      docketClient.postToDocket(docketObject);
+      entityCollection.filterByCondition(filterQuery).then((data) => {
+        if (data) {
+          debug(`branch found ${data}`);
+          resolve(data);
+        } else {
+          // return empty object in place of null
+          debug(`no branch found by this ${filterQuery}`);
+          resolve([]);
+        }
+      }).catch((e) => {
+        debug(`failed to find ${e}`);
+      });
+    } catch (e) {
+      docketObject.name = "branch_ExceptionOnfilterByCondition";
+      docketObject.keyDataAsJSON = `branchObject ${filterQuery}}`;
+      docketObject.details = `caught Exception on branch_filterByCondition ${e.message}`;
+      docketClient.postToDocket(docketObject);
+      debug(`caught exception ${e}`);
+      reject(e);
+    }
+  });
+};
