@@ -93,12 +93,12 @@ module.exports.findOne = (attribute, value) => {
 // If there is no object matching the attribute/value, return empty object i.e. {}
 // null, undefined should be rejected with Invalid Argument Error
 // Should return a Promise
-module.exports.findMany = (attribute, value) => {
+module.exports.findMany = (attribute, value, orderBy) => {
   return new Promise((resolve, reject) => {
     try {
       var query = {};
       query[attribute] = value;
-      entityCollection.find(query)
+      entityCollection.find(query).sort(orderBy)
         .then((data) => {
           debug(`branch found ${data}`);
           resolve(data);
@@ -149,10 +149,10 @@ module.exports.findById = (id) => {
 // Filters entity collection by entityDetails
 // Returns a promise
 
-module.exports.filterByEntityDetails = (filterQuery) => {
+module.exports.filterByEntityDetails = (filterQuery, orderBy) => {
   return new Promise((resolve, reject) => {
     try {
-      entityCollection.find(filterQuery).then((docs) => {
+      entityCollection.find(filterQuery).sort(orderBy).then((docs) => {
         debug(`Documents filterd by ${filterQuery} are ${docs}`);
         resolve(docs);
       }).catch((e) => {
@@ -193,46 +193,6 @@ module.exports.update = (id, update) => {
     } catch (e) {
       debug(`caught exception ${e}`);
       reject(e.message);
-    }
-  });
-};
-
-//filter by conditions
-module.exports.filterByCondition = (credentials) => {
-  return new Promise((resolve, reject) => {
-    try {
-
-      let Obj = {};
-      if (credentials.parent != undefined) {
-        Obj.parent = credentials.parent;
-      }
-      if (credentials.enableFlag != undefined) {
-        Obj.enableFlag = credentials.enableFlag;
-      }
-      if (credentials.processingStatus != undefined) {
-        Obj.processingStatus = credentials.processingStatus;
-      }
-
-      entityCollection.find(Obj)
-        .then((res) => {
-          debug("authentication successful: ", res);
-          resolve(res);
-        }, (err) => {
-          debug(`Invalid Credentials. ${err}`);
-
-          reject(err);
-
-        })
-        .catch((e) => {
-          debug(`exception on authenticating user: ${e}`);
-
-          reject(e);
-
-        });
-
-    } catch (e) {
-      debug(`caught exception: ${e}`);
-      reject(e);
     }
   });
 };

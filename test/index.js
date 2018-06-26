@@ -27,8 +27,8 @@ describe('branch model validation', () => {
     "description": "entity1 description",
     "createdBy": "SYSTEM",
     "createdDate": new Date().toISOString(),
-    "processingStatus": "authorized",
-    "accessLevel": 1
+    "entityId": "abc12",
+    "accessLevel": "1"
   };
 
   let invalidObject = {
@@ -163,8 +163,8 @@ describe('branch model validation', () => {
         "description": "entity1 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
-        "processingStatus": "authorized",
-        "accessLevel": 1
+        "entityId": "abc12",
+        "accessLevel": "1"
       },
       object2 = {
         //add one more valid branch object here
@@ -175,8 +175,8 @@ describe('branch model validation', () => {
         "description": "entity2 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
-        "processingStatus": "authorized",
-        "accessLevel": 1
+        "entityId": "abc13",
+        "accessLevel": "1"
       };
     let object3 = {
       "tenantId": "IVL",
@@ -186,8 +186,8 @@ describe('branch model validation', () => {
       "description": "entity3 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
-      "processingStatus": "authorized",
-      "accessLevel": 1
+      "entityId": "abc14",
+      "accessLevel": "1"
     };
     beforeEach((done) => {
       db.deleteAll().then((res) => {
@@ -319,8 +319,8 @@ describe('branch model validation', () => {
       "description": "entity1 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
-      "processingStatus": "authorized",
-      "accessLevel": 1
+      "entityId": "abc12",
+      "accessLevel": "1"
     };
     // Insert one record , get its id
     // 1. Query by this id and it should return one branch object
@@ -403,8 +403,8 @@ describe('branch model validation', () => {
         "description": "entity1 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
-        "processingStatus": "authorized",
-        "accessLevel": 1
+        "entityId": "abc12",
+        "accessLevel": "1"
       },
       object2 = {
         //add one more valid branch object here
@@ -415,8 +415,8 @@ describe('branch model validation', () => {
         "description": "entity2 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
-        "processingStatus": "authorized",
-        "accessLevel": 1
+        "entityId": "abc13",
+        "accessLevel": "1"
       };
     beforeEach((done) => {
       db.deleteAll().then((res) => {
@@ -515,8 +515,8 @@ describe('branch model validation', () => {
         "description": "entity1 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
-        "processingStatus": "authorized",
-        "accessLevel": 1
+        "entityId": "abc12",
+        "accessLevel": "1"
       },
       object2 = {
         //add one more valid branch object here
@@ -527,8 +527,8 @@ describe('branch model validation', () => {
         "description": "entity2 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
-        "processingStatus": "authorized",
-        "accessLevel": 1
+        "entityId": "abc13",
+        "accessLevel": "1"
       };
     beforeEach((done) => {
       db.deleteAll().then((res) => {
@@ -614,37 +614,42 @@ describe('branch model validation', () => {
       }
     });
   });
-
+  //
   describe("testing filterByEntityDetails", () => {
+
     let object1 = {
-        //add one valid branch object here
+        //add one valid role object here
         "tenantId": "IVL",
-        "entityCode": "entity1",
-        "name": "entity",
+        "enabledFlag": true,
+        "entityCode": "entity12",
+        "name": "entity1",
         "parent": "entityparent1",
         "description": "entity1 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
-        "processingStatus": "authorized",
-        "accessLevel": 1
+        "entityId": "abc12",
+        "accessLevel": "1"
+
       },
       object2 = {
-        //add one more valid branch object here
+        //add one more valid role object here
         "tenantId": "IVL",
         "entityCode": "entity2",
-        "name": "entity",
+        "name": "entity2",
         "parent": "entityparent2",
         "description": "entity2 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
-        "processingStatus": "authorized",
-        "accessLevel": 1
+        "entityId": "abc13",
+        "accessLevel": "1"
       };
+
     beforeEach((done) => {
       db.deleteAll()
         .then((res) => {
           db.save(object1)
             .then((res) => {
+              id = res._id;
               db.save(object2)
                 .then((res) => {
                   done();
@@ -653,30 +658,28 @@ describe('branch model validation', () => {
         });
     });
 
-    //Query by processing status as authorized, enable as true and name as Branch
+    //Query by processing status as PENDING_AUTHORIZATION, activationStatus as inACTIVE and applicationCode as CDA
     // It should return array with only one object
     it("should return filterd values based on query ", (done) => {
       var res = branch.filterByEntityDetails({
-        processingStatus: 'authorized',
-        name: 'entity',
-        enableFlag: true
+        "processingStatus": "PENDING_AUTHORIZATION"
+
       });
       expect(res).to.eventually.be.a("array")
         .to.have.length(2)
         .notify(done);
     });
 
-    //Query by enable as false
-    //It should return empty array as there are no roles with enable as false
+    //Query by activation status as ACTIVE
+    //It should return empty array as there are no roles with activation status as inACTIVE
     it("should return empty array as there are no roles matching the query parameter ", (done) => {
       var res = branch.filterByEntityDetails({
-        enable: false
+        processingStatus: 'inACTIVE'
       });
       expect(res).to.eventually.be.a("array")
         .to.have.length(0)
         .notify(done);
     });
-
 
     it("should throw IllegalArgumentException for null query parameter ", (done) => {
       let res = branch.filterByEntityDetails(null);
@@ -707,8 +710,8 @@ describe('branch model validation', () => {
         "description": "entity1 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
-        "processingStatus": "authorized",
-        "accessLevel": 1
+        "entityId": "abc12",
+        "accessLevel": "1"
       },
       object2 = {
         //add one more valid branch object here
@@ -719,8 +722,8 @@ describe('branch model validation', () => {
         "description": "entity2 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
-        "processingStatus": "authorized",
-        "accessLevel": 1
+        "entityId": "abc32",
+        "accessLevel": "1"
       };
 
     beforeEach((done) => {
@@ -797,89 +800,4 @@ describe('branch model validation', () => {
         .notify(done);
     });
   });
-
-  describe("testing filterByCondition", () => {
-    let objectOne = {
-        //add one valid branch object here
-        "enableFlag": true,
-        "tenantId": "IVL",
-        "entityCode": "entityVicky",
-        "name": "entity",
-        "parent": "entityparent1",
-        "description": "bc1 description",
-        "createdBy": "SYSTEM",
-        "createdDate": new Date().toISOString(),
-        "processingStatus": "authorized",
-        "accessLevel": 1
-
-      },
-      objectTwo = {
-        //add one more valid branch object here
-        "enableFlag": true,
-        "tenantId": "IVL",
-        "entityCode": "entity2",
-        "name": "entity",
-        "parent": "entityparent2",
-        "description": "bc1 description",
-        "createdBy": "SYSTEM",
-        "createdDate": new Date().toISOString(),
-        "processingStatus": "authorized",
-        "accessLevel": 1
-
-      };
-    beforeEach((done) => {
-      db.deleteAll()
-        .then((res) => {
-          db.save(objectOne)
-            .then((res) => {
-              db.save(objectTwo)
-                .then((res) => {
-                  done();
-                });
-            });
-        });
-    });
-
-    //Query by processing status as authorized, enableFlag as true and name as Branch
-    // It should return array with only one object
-    it("should return filterd values based on query ", (done) => {
-      var res = branch.filterByCondition({
-        parent: "entityparent1"
-
-      });
-      expect(res).to.eventually.be.a("array")
-        .to.have.length(1)
-        .notify(done);
-    });
-
-    //  Query by enableFlag as false
-    //  It should return empty array as there are no roles with enableFlag as false
-    it("should return empty array as there are no roles matching the query parameter ", (done) => {
-      var res = branch.filterByCondition({
-        enableFlag: false
-      });
-      expect(res).to.eventually.be.a("array")
-        .to.have.length(0)
-        .notify(done);
-    });
-
-
-    it("should throw IllegalArgumentException for null query parameter ", (done) => {
-      let res = branch.filterByCondition(null);
-      expect(res)
-        .to.eventually.to.be.rejectedWith("IllegalArgumentException")
-        .notify(done);
-    });
-
-    it("should throw IllegalArgumentException for undefined query parameter ", (done) => {
-      let undefinedQuery;
-      let res = branch.filterByCondition(undefinedQuery);
-      expect(res)
-        .to.eventually.to.be.rejectedWith("IllegalArgumentException")
-        .notify(done);
-    });
-
-  });
-
-
 });

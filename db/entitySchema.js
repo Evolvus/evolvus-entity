@@ -27,6 +27,13 @@ var entitySchema = new mongoose.Schema({
       message: "{PATH} can contain only alphabets and numbers"
     }
   },
+  entityId: {
+    type: String,
+    minLength: 5,
+    maxLength: 100,
+    required: true,
+    unique: true
+  },
   name: {
     type: String,
     minLength: 1,
@@ -40,7 +47,7 @@ var entitySchema = new mongoose.Schema({
     }
   },
   accessLevel: {
-    type: Number,
+    type: String,
     required: true
   },
   description: {
@@ -61,7 +68,7 @@ var entitySchema = new mongoose.Schema({
   },
   processingStatus: {
     type: String,
-    required: true
+    default: "PENDING_AUTHORIZATION"
   },
   createdBy: {
     type: String,

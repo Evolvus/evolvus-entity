@@ -16,13 +16,18 @@ module.exports.schema = {
       "minLength": 1,
       "maxLength": 50
     },
+    "entityId": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 100
+    },
     "name": {
       "type": "string",
       "minLength": 1,
       "maxLength": 50
     },
     "accessLevel": {
-      "type": "number"
+      "type": "string"
     },
     "description": {
       "type": "string",
@@ -34,7 +39,9 @@ module.exports.schema = {
       "default": "true"
     },
     "processingStatus": {
-      "type": "string"
+      "type": "string",
+      "enum": ["PENDING_AUTHORIZATION", "AUTHORIZED", "REJECTED"],
+      "default": "PENDING_AUTHORIZATION"
     },
     "createdBy": {
       "type": "string"
@@ -121,5 +128,5 @@ module.exports.schema = {
       }
     }
   },
-  "required": ["tenantId", "entityCode", "name", "parent", "description", "createdBy", "createdDate", "processingStatus", "accessLevel"]
+  "required": ["tenantId", "entityCode", "name", "parent", "description", "createdBy", "createdDate", "accessLevel", "entityId"]
 };

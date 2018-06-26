@@ -96,7 +96,7 @@ module.exports.getAll = (tenantId, name, accessLevel, limit, orderBy) => {
       }
       if (orderBy == null) {
         orderBy = {
-          name: 1
+          lastUpdatedDate: -1
         };
       }
       docketObject.name = "entity_getAll";
@@ -196,13 +196,17 @@ module.exports.getOne = (attribute, value) => {
   });
 };
 
-module.exports.getMany = (attribute, value) => {
+module.exports.getMany = (attribute, value, orderBy) => {
   return new Promise((resolve, reject) => {
     try {
       if (attribute == null || value == null || typeof attribute === 'undefined' || typeof value === 'undefined') {
         throw new Error("IllegalArgumentException: attribute/value is null or undefined");
       }
-
+      if (orderBy == null || typeof orderBy === 'undefined') {
+        orderBy = {
+          lastUpdatedDate: -1
+        };
+      }
       docketObject.name = "entity_getMany";
       docketObject.keyDataAsJSON = `entityObject ${attribute} with value ${value}`;
       docketObject.details = `entity getMany initiated`;
@@ -230,17 +234,34 @@ module.exports.getMany = (attribute, value) => {
   });
 };
 
-module.exports.filterByEntityDetails = (filterQuery) => {
+module.exports.filterByEntityDetails = (filterQuery, orderBy) => {
   return new Promise((resolve, reject) => {
     try {
-      if (filterQuery == null) {
-        throw new Error(`IllegalArgumentException: filterQuery is ${filterQuery}`);
+      let queryObject = {};
+      if (filterQuery == null || typeof filterQuery === 'undefined') {
+        throw new Error("IllegalArgumentException: filterQuery is null or undefined");
+      } else {
+        if (filterQuery.parent != null && (filterQuery.parent !== 'undefined')) {
+          queryObject.parent = filterQuery.parent;
+        }
+        if (filterQuery.enableFlag != null && (filterQuery.enableFlag != 'undefined')) {
+          queryObject.enableFlags = filterQuery.enableFlag;
+        }
+        if (filterQuery.processingStatus != null && (filterQuery.processingStatus != 'undefined')) {
+          queryObject.processingStatus = filterQuery.processingStatus;
+        }
+      }
+      if (orderBy == null || typeof orderBy === 'undefined') {
+        orderBy = {
+          lastUpdatedDate: -1
+        };
       }
       docketObject.name = "entity_filterByEntityDetails";
       docketObject.keyDataAsJSON = `Filter the entity collection by query ${filterQuery}`;
       docketObject.details = `entity_filterByEntityDetails initiated`;
       docketClient.postToDocket(docketObject);
-      entityCollection.filterByEntityDetails(filterQuery).then((filteredData) => {
+
+      entityCollection.filterByEntityDetails(queryObject, orderBy).then((filteredData) => {
         if (filteredData.length > 0) {
           debug(`filtered Data is ${filteredData}`);
           resolve(filteredData);
@@ -252,9 +273,9 @@ module.exports.filterByEntityDetails = (filterQuery) => {
         debug(`failed to find ${e}`);
       });
     } catch (e) {
-      docketObject.name = "entity_ExceptionOnfilterByEntityDetails";
+      docketObject.name = "entity_ExceptionOnFilterByEntityDetails";
       docketObject.keyDataAsJSON = `Filter the entity collection by query ${filterQuery}`;
-      docketObject.details = `caught Exception on entity_filterByEntityDetails ${e.message}`;
+      docketObject.details = `caught Exception on entity_filterByentityDetails ${e.message}`;
       docketClient.postToDocket(docketObject);
       debug(`caught exception ${e}`);
       reject(e);
@@ -290,36 +311,36 @@ module.exports.update = (id, update) => {
   });
 };
 
-module.exports.filterByCondition = (filterQuery) => {
-  return new Promise((resolve, reject) => {
-    try {
-      if (filterQuery == null) {
-        throw new Error(`IllegalArgumentException: filterQuery is ${filterQuery}`);
-      }
-
-      docketObject.name = "branch_filterByCondition";
-      docketObject.keyDataAsJSON = `branchObject ${filterQuery}`;
-      docketObject.details = `branch filterByCondition initiated`;
-      docketClient.postToDocket(docketObject);
-      entityCollection.filterByCondition(filterQuery).then((data) => {
-        if (data) {
-          debug(`branch found ${data}`);
-          resolve(data);
-        } else {
-          // return empty object in place of null
-          debug(`no branch found by this ${filterQuery}`);
-          resolve([]);
-        }
-      }).catch((e) => {
-        debug(`failed to find ${e}`);
-      });
-    } catch (e) {
-      docketObject.name = "branch_ExceptionOnfilterByCondition";
-      docketObject.keyDataAsJSON = `branchObject ${filterQuery}}`;
-      docketObject.details = `caught Exception on branch_filterByCondition ${e.message}`;
-      docketClient.postToDocket(docketObject);
-      debug(`caught exception ${e}`);
-      reject(e);
-    }
-  });
-};
+// module.exports.filterByCondition = (filterQuery) => {
+//   return new Promise((resolve, reject) => {
+//     try {
+//       if (filterQuery == null) {
+//         throw new Error(`IllegalArgumentException: filterQuery is ${filterQuery}`);
+//       }
+//
+//       docketObject.name = "branch_filterByCondition";
+//       docketObject.keyDataAsJSON = `branchObject ${filterQuery}`;
+//       docketObject.details = `branch filterByCondition initiated`;
+//       docketClient.postToDocket(docketObject);
+//       entityCollection.filterByCondition(filterQuery).then((data) => {
+//         if (data) {
+//           debug(`branch found ${data}`);
+//           resolve(data);
+//         } else {
+//           // return empty object in place of null
+//           debug(`no branch found by this ${filterQuery}`);
+//           resolve([]);
+//         }
+//       }).catch((e) => {
+//         debug(`failed to find ${e}`);
+//       });
+//     } catch (e) {
+//       docketObject.name = "branch_ExceptionOnfilterByCondition";
+//       docketObject.keyDataAsJSON = `branchObject ${filterQuery}}`;
+//       docketObject.details = `caught Exception on branch_filterByCondition ${e.message}`;
+//       docketClient.postToDocket(docketObject);
+//       debug(`caught exception ${e}`);
+//       reject(e);
+//     }
+//   });
+// };
