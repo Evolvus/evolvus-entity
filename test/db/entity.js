@@ -497,4 +497,74 @@ describe("db branch testing", () => {
         .notify(done);
     });
   });
+
+
+   describe('testing update entity', () => {
+     //Delete all the recods from database
+     //add 2 entitys
+
+     let object1 = {
+       //add valid object
+       "tenantId": "IVL",
+       "entityCode": "entity1",
+       "name": "entity",
+       "parent": "entityparent1",
+       "description": "entity1 description",
+       "createdBy": "SYSTEM",
+       "createdDate": new Date().toISOString(),
+       "processingStatus": "authorized",
+       "accessLevel": 1
+     };
+     let object2 = {
+       //add valid object with one attribute value same as "branch1"
+       "tenantId": "IVL",
+       "entityCode": "entity2",
+       "name": "entity",
+       "parent": "entityparent2",
+       "description": "entity2 description",
+       "createdBy": "SYSTEM",
+       "createdDate": new Date().toISOString(),
+       "processingStatus": "authorized",
+       "accessLevel": 1
+     };
+
+     let id;
+     let update = {
+       entityCode: "CDA",
+       name: "abc"
+     };
+     beforeEach((done) => {
+       branch.deleteAll().then((res) => {
+         branch.save(object1).then((res) => {
+           id = res._id;
+           branch.save(object2).then((res) => {
+             done();
+           });
+         });
+       });
+     });
+
+     it('should update a entity ', (done) => {
+       var res = branch.update(id, update);
+       expect(res).to.eventually.be.a("object")
+         .to.have.property("name")
+         .to.eql(update.name)
+         .notify(done);
+     });
+
+     it("should be rejected when there is no entity matching the parameter id", (done) => {
+       var res = branch.update("5b30d72a54e5f94fdc4b66b7", update);
+       expect(res).to.be.rejectedWith(`There is no such entity with id:5b30d72a54e5f94fdc4b66b7`)
+         .notify(done);
+     });
+
+     it("should be rejected for arbitrary object as Id parameter ", (done) => {
+       // an id is a 12 byte string, -1 is an invalid id value
+       let invalidId = "some value";
+       let res = branch.update(invalidId, update);
+       expect(res)
+         .to.eventually.to.be.rejectedWith("must be a single String of 12 bytes")
+         .notify(done);
+     });
+   });
 });

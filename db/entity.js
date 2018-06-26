@@ -166,6 +166,37 @@ module.exports.filterByEntityDetails = (filterQuery) => {
   });
 };
 
+//Finds one entity by its code and updates it with new values
+module.exports.update = (id, update) => {
+  return new Promise((resolve, reject) => {
+    try {
+      entityCollection.findById({
+        _id: new ObjectId(id)
+      }).then((app) => {
+        if (app) {
+          app.set(update);
+          app.save().then((res) => {
+            debug(`updated successfully ${res}`);
+            resolve(res);
+          }).catch((e) => {
+            debug(`failed to update ${e}`);
+            reject(e);
+          });
+        } else {
+          debug(`role not found with id, ${id}`);
+          reject(`There is no such entity with id:${id}`);
+        }
+      }).catch((e) => {
+        debug(`exception on findById ${e}`);
+        reject(e.message);
+      });
+    } catch (e) {
+      debug(`caught exception ${e}`);
+      reject(e.message);
+    }
+  });
+};
+
 // Deletes all the entries of the collection.
 // To be used by test only
 module.exports.deleteAll = () => {

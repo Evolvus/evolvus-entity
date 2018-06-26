@@ -695,4 +695,107 @@ describe('branch model validation', () => {
 
   });
 
+  describe("testing update Role", () => {
+    var id;
+
+    let object1 = {
+        //add one valid branch object here
+        "tenantId": "IVL",
+        "entityCode": "entity1",
+        "name": "entity",
+        "parent": "entityparent1",
+        "description": "entity1 description",
+        "createdBy": "SYSTEM",
+        "createdDate": new Date().toISOString(),
+        "processingStatus": "authorized",
+        "accessLevel": 1
+      },
+      object2 = {
+        //add one more valid branch object here
+        "tenantId": "IVL",
+        "entityCode": "entity2",
+        "name": "entity",
+        "parent": "entityparent2",
+        "description": "entity2 description",
+        "createdBy": "SYSTEM",
+        "createdDate": new Date().toISOString(),
+        "processingStatus": "authorized",
+        "accessLevel": 1
+      };
+
+    beforeEach((done) => {
+      db.deleteAll()
+        .then((res) => {
+          db.save(object1)
+            .then((res) => {
+              id = res._id;
+              db.save(object2)
+                .then((res) => {
+                  done();
+                });
+            });
+        });
+    });
+
+    it('should update a entity and have same _id', (done) => {
+      var res = branch.update(id, {
+        name: "adminOne",
+        parent: "IT"
+      });
+      expect(res)
+        .to.eventually.be.a("object")
+        .to.have.property("_id")
+        .to.eql(id)
+        .notify(done);
+    });
+
+    it('should update a entity with new values', (done) => {
+      var res = branch.update(id, {
+        name: "adminOne",
+        parent: "IT"
+      });
+      expect(res)
+        .to.eventually.be.a("object")
+        .to.have.property("name")
+        .to.eql("adminOne")
+        .notify(done);
+    });
+
+    it("should throw IllegalArgumentException for undefined Id parameter ", (done) => {
+      let undefinedId;
+      let res = branch.update(undefinedId, {
+        name: "sdg"
+      });
+      expect(res)
+        .to.eventually.to.be.rejectedWith("IllegalArgumentException")
+        .notify(done);
+    });
+
+    it("should throw IllegalArgumentException for undefined update parameter ", (done) => {
+      let undefinedUpdate;
+      let res = branch.update(id, undefinedUpdate);
+      expect(res)
+        .to.eventually.to.be.rejectedWith("IllegalArgumentException")
+        .notify(done);
+    });
+
+    it("should throw IllegalArgumentException for null Id parameter ", (done) => {
+      // an id is a 12 byte string, -1 is an invalid id value+
+      let res = branch.update(null, {
+        roleName: "Admin"
+      });
+      expect(res)
+        .to.eventually.to.be.rejectedWith("IllegalArgumentException")
+        .notify(done);
+    });
+
+    it("should throw IllegalArgumentException for null update parameter ", (done) => {
+      // an id is a 12 byte string, -1 is an invalid id value+
+      let res = branch.update(id, null);
+      expect(res)
+        .to.eventually.to.be.rejectedWith("IllegalArgumentException")
+        .notify(done);
+    });
+  });
+
 });
