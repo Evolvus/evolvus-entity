@@ -28,7 +28,7 @@ describe("db branch testing", () => {
     // add a valid branch object
     "tenantId": "IVL",
     "entityCode": "entity1",
-    "name": "entity",
+    "name": "entity1",
     "parent": "entityparent1",
     "description": "bc1 description",
     "createdBy": "SYSTEM",
@@ -40,12 +40,12 @@ describe("db branch testing", () => {
     // add a valid branch object
     "tenantId": "IVL",
     "entityCode": "entity2",
-    "name": "entity",
+    "name": "entity2",
     "parent": "entityparent2",
     "description": "bc1 description",
     "createdBy": "SYSTEM",
     "createdDate": new Date().toISOString(),
-    "entityId": "abc12",
+    "entityId": "abc12def456",
     "accessLevel": "1"
   };
 
@@ -105,7 +105,7 @@ describe("db branch testing", () => {
     let object1 = {
       // add a valid branch object
       "tenantId": "IVL",
-      "entityCode": "entity",
+      "entityCode": "entity1",
       "name": "entity1",
       "parent": "entityparent1",
       "description": "entity1 description",
@@ -117,37 +117,37 @@ describe("db branch testing", () => {
     let object2 = {
       // add a valid branch object
       "tenantId": "IVL",
-      "entityCode": "entity",
+      "entityCode": "entity2",
       "name": "entity2",
       "parent": "entityparent2",
       "description": "entity2 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
-      "entityId": "abc13",
+      "entityId": "abc12def345",
       "accessLevel": "3"
     };
     let object3 = {
       // add a valid branch object
       "tenantId": "IVL",
-      "entityCode": "entity",
+      "entityCode": "entity3",
       "name": "entity3",
       "parent": "entityparent3",
       "description": "entity3 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
-      "entityId": "abc14",
+      "entityId": "abc12jhg45",
       "accessLevel": "0"
     };
     let object4 = {
       // add a valid branch object
       "tenantId": "IVL",
-      "entityCode": "entity",
+      "entityCode": "entity4",
       "name": "entity4",
       "parent": "entityparent4",
       "description": "entity4 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
-      "entityId": "abc15",
+      "entityId": "abc12kff34",
       "accessLevel": "1"
     };
     // 1. Delete all records in the table and insert
@@ -177,7 +177,7 @@ describe("db branch testing", () => {
       let orderBy = {
         name: 1
       };
-      let res = branch.findAll('IVL', 'entity', "1", -1, orderBy);
+      let res = branch.findAll('IVL', 'abc12', "1", -1, orderBy);
       expect(res)
         .to.be.fulfilled.then((docs) => {
           expect(docs)
@@ -188,8 +188,8 @@ describe("db branch testing", () => {
             .to.have.property('tenantId')
             .to.eql('IVL');
           expect(docs[0])
-            .to.have.property('entityCode')
-            .to.eql('entity');
+            .to.have.property('entityId')
+            .to.eql('abc12');
           expect(docs[0])
             .to.have.property('accessLevel')
             .to.eql("4");
@@ -206,7 +206,7 @@ describe("db branch testing", () => {
       let orderBy = {
         name: 1
       };
-      let res = branch.findAll('IVL', 'entity', "1", 2, orderBy);
+      let res = branch.findAll('IVL', 'abc12', "1", 2, orderBy);
       expect(res)
         .to.be.fulfilled.then((docs) => {
           expect(docs)
@@ -217,8 +217,8 @@ describe("db branch testing", () => {
             .to.have.property('tenantId')
             .to.eql('IVL');
           expect(docs[0])
-            .to.have.property('entityCode')
-            .to.eql('entity');
+            .to.have.property('entityId')
+            .to.eql('abc12');
           expect(docs[0])
             .to.have.property('accessLevel')
             .to.eql("4");
@@ -246,7 +246,7 @@ describe("db branch testing", () => {
       let orderBy = {
         name: 1
       };
-      let res = branch.findAll('tid', 'entity', 1, 2, orderBy);
+      let res = branch.findAll('tid', 'abc12', 1, 2, orderBy);
       expect(res)
         .to.be.fulfilled.then((docs) => {
           expect(docs)
@@ -299,8 +299,8 @@ describe("db branch testing", () => {
     it("should return branch identified by Id ", (done) => {
       let res = branch.findById(id);
       expect(res)
-        .to.eventually.have.property('entityCode')
-        .to.eql('entity1')
+        .to.eventually.have.property('entityId')
+        .to.eql('abc12')
         .notify(done);
     });
 
@@ -335,7 +335,7 @@ describe("db branch testing", () => {
       "description": "entity2 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
-      "entityId": "abc13",
+      "entityId": "abc13def345",
       "accessLevel": "1"
     };
     // Delete all records, insert two record
@@ -400,7 +400,7 @@ describe("db branch testing", () => {
       "description": "entity2 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
-      "entityId": "abc13",
+      "entityId": "abc13def345",
       "accessLevel": "1"
     };
     // delete all records and insert two branchs
@@ -443,7 +443,7 @@ describe("db branch testing", () => {
     let object1 = {
       //add valid object
       "tenantId": "IVL",
-      "entityCode": "entity",
+      "entityCode": "entity1",
       "name": "entity1",
       "parent": "entityparent1",
       "description": "entity1 description",
@@ -455,13 +455,13 @@ describe("db branch testing", () => {
     let object2 = {
       //add valid object with one attribute value same as "branch1"
       "tenantId": "IVL",
-      "entityCode": "entity",
+      "entityCode": "entity2",
       "name": "entity2",
       "parent": "entityparent2",
       "description": "entity2 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
-      "entityId": "abc13",
+      "entityId": "abc13def345",
       "accessLevel": "1"
     };
 
@@ -510,7 +510,7 @@ describe("db branch testing", () => {
     let object1 = {
       //add valid object
       "tenantId": "IVL",
-      "entityCode": "entity",
+      "entityCode": "entity1",
       "name": "entity1",
       "parent": "entityparent1",
       "description": "entity1 description",
@@ -522,13 +522,13 @@ describe("db branch testing", () => {
     let object2 = {
       //add valid object with one attribute value same as "branch1"
       "tenantId": "IVL",
-      "entityCode": "entity",
+      "entityCode": "entity2",
       "name": "entity2",
       "parent": "entityparent2",
       "description": "entity2 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
-      "entityId": "abc13",
+      "entityId": "abc13def34",
       "accessLevel": "1"
     };
 

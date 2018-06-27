@@ -88,7 +88,7 @@ module.exports.save = (entityObject) => {
 // List all the objects in the database
 // makes sense to return on a limited number
 // (what if there are 1000000 records in the collection)
-module.exports.getAll = (tenantId, entityCode, accessLevel, limit, orderBy) => {
+module.exports.getAll = (tenantId, entityId, accessLevel, limit, orderBy) => {
   return new Promise((resolve, reject) => {
     try {
       if (limit == null) {
@@ -104,7 +104,7 @@ module.exports.getAll = (tenantId, entityCode, accessLevel, limit, orderBy) => {
       docketObject.details = `entity getAll method`;
       docketClient.postToDocket(docketObject);
 
-      entityCollection.findAll(tenantId, entityCode, accessLevel, limit, orderBy).then((docs) => {
+      entityCollection.findAll(tenantId, entityId, accessLevel, limit, orderBy).then((docs) => {
         debug(`entity(s) stored in the database are ${docs}`);
         resolve(docs);
       }).catch((e) => {

@@ -45,13 +45,15 @@ module.exports.save = (object) => {
 // Returns a limited set if all the role(s) with a Promise
 // if the collectiom has no records it Returns
 // a promise with a result of  empty object i.e. {}
-module.exports.findAll = (tenantId, entityCode, accessLevel, limit, orderBy) => {
+module.exports.findAll = (tenantId, entityId, accessLevel, limit, orderBy) => {
   let query = {
     tenantId: tenantId,
     accessLevel: {
       $gte: accessLevel
     },
-    entityCode: entityCode
+    entityId: {
+      $regex: entityId + ".*"
+    },
   };
 
   if (limit < 1) {

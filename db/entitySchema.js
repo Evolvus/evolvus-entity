@@ -19,6 +19,7 @@ var entitySchema = new mongoose.Schema({
     minLength: 1,
     maxLength: 50,
     required: true,
+    unique: true,
     validate: {
       validator: function(v) {
         return /^[a-zA-Z\-0-9]+$/.test(v);
