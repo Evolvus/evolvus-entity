@@ -559,8 +559,8 @@ describe("db branch testing", () => {
 
 
     //Query by processing status as authorized
-    //It should return empty array as there are no roles with processing status as authorized
-    it("should return empty array as there are no roles matching the query parameter ", (done) => {
+    //It should return empty array as there are no entity with processing status as authorized
+    it("should return empty array as there are no entity matching the query parameter ", (done) => {
       var res = branch.filterByEntityDetails({
         processingStatus: 'auuthorized',
       });

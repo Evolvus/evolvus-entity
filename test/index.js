@@ -671,8 +671,8 @@ describe('branch model validation', () => {
     });
 
     //Query by activation status as ACTIVE
-    //It should return empty array as there are no roles with activation status as inACTIVE
-    it("should return empty array as there are no roles matching the query parameter ", (done) => {
+    //It should return empty array as there are no entity with activation status as inACTIVE
+    it("should return empty array as there are no entity matching the query parameter ", (done) => {
       var res = branch.filterByEntityDetails({
         processingStatus: 'inACTIVE'
       });
