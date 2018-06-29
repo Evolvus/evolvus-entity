@@ -4,7 +4,7 @@ const {
   contact
 } = require("evolvus-contact");
 
-var Contact = mongoose.model("contact", contact.contactDBschema);
+var Contact = mongoose.model("contactCollection", contact.contactDBschema);
 
 var entitySchema = new mongoose.Schema({
   // Add all attributes below tenantId
