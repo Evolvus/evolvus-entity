@@ -88,23 +88,20 @@ module.exports.save = (entityObject) => {
 // List all the objects in the database
 // makes sense to return on a limited number
 // (what if there are 1000000 records in the collection)
-module.exports.getAll = (tenantId, entityId, accessLevel, limit, orderBy) => {
+module.exports.getAll = (tenantId, entityId, accessLevel, pageSize, pageNo, orderBy) => {
   return new Promise((resolve, reject) => {
     try {
-      if (limit == null) {
-        limit = -1;
-      }
       if (orderBy == null) {
         orderBy = {
           lastUpdatedDate: -1
         };
       }
       docketObject.name = "entity_getAll";
-      docketObject.keyDataAsJSON = `getAll with limit ${limit}`;
+      docketObject.keyDataAsJSON = `getAll with pageSize ${pageSize}`;
       docketObject.details = `entity getAll method`;
       docketClient.postToDocket(docketObject);
 
-      entityCollection.findAll(tenantId, entityId, accessLevel, limit, orderBy).then((docs) => {
+      entityCollection.findAll(tenantId, entityId, accessLevel,  pageSize, pageNo, orderBy).then((docs) => {
         debug(`entity(s) stored in the database are ${docs}`);
         resolve(docs);
       }).catch((e) => {
@@ -234,7 +231,7 @@ module.exports.getMany = (attribute, value, orderBy) => {
   });
 };
 
-module.exports.filterByEntityDetails = (filterQuery, orderBy) => {
+module.exports.filterByEntityDetails = (filterQuery, pageSize,pageNo,orderBy) => {
   return new Promise((resolve, reject) => {
     try {
       let queryObject = {};
@@ -261,7 +258,7 @@ module.exports.filterByEntityDetails = (filterQuery, orderBy) => {
       docketObject.details = `entity_filterByEntityDetails initiated`;
       docketClient.postToDocket(docketObject);
 
-      entityCollection.filterByEntityDetails(queryObject, orderBy).then((filteredData) => {
+      entityCollection.filterByEntityDetails(queryObject, pageSize,pageNo, orderBy).then((filteredData) => {
         if (filteredData.length > 0) {
           debug(`filtered Data is ${filteredData}`);
           resolve(filteredData);
@@ -304,6 +301,55 @@ module.exports.update = (id, update) => {
       docketObject.name = "entity_ExceptionOnUpdate";
       docketObject.keyDataAsJSON = `entityObject ${id} to be updated with  ${update}`;
       docketObject.details = `caught Exception on entity_update ${e.message}`;
+      docketClient.postToDocket(docketObject);
+      debug(`caught exception ${e}`);
+      reject(e);
+    }
+  });
+};
+
+module.exports.getEntityCounts = (countQuery, orderBy) => {
+  return new Promise((resolve, reject) => {
+    try {
+      let queryObject = {};
+      if (countQuery == null || typeof countQuery === 'undefined') {
+        throw new Error("IllegalArgumentException: countQuery is null or undefined");
+      } else {
+        if (countQuery.parent != null && (countQuery.parent !== 'undefined')) {
+          queryObject.parent = countQuery.parent;
+        }
+        if (countQuery.enableFlag != null && (countQuery.enableFlag != 'undefined')) {
+          queryObject.enableFlag = countQuery.enableFlag;
+        }
+        if (countQuery.processingStatus != null && (countQuery.processingStatus != 'undefined')) {
+          queryObject.processingStatus = countQuery.processingStatus;
+        }
+      }
+      if (orderBy == null || typeof orderBy === 'undefined') {
+        orderBy = {
+          lastUpdatedDate: -1
+        };
+      }
+      docketObject.name = "entity_getEntityCounts";
+      docketObject.keyDataAsJSON = `Get entity Count from entity collection by query ${countQuery}`;
+      docketObject.details = `entity_getEntityCounts initiated`;
+      docketClient.postToDocket(docketObject);
+
+      entityCollection.entityCounts(queryObject, orderBy).then((entityCount) => {
+        if (entityCount > 0) {
+          debug(`entityCount Data is ${entityCount}`);
+          resolve(entityCount);
+        } else {
+          debug(`No entity count data available for filter query ${entityCount}`);
+          resolve(0);
+        }
+      }).catch((e) => {
+        debug(`failed to find ${e}`);
+      });
+    } catch (e) {
+      docketObject.name = "entity_ExceptionOnGetRoleCounts";
+      docketObject.keyDataAsJSON = `Get role count from the entity collection by query ${countQuery}`;
+      docketObject.details = `caught Exception on entity_getEntityCounts ${e.message}`;
       docketClient.postToDocket(docketObject);
       debug(`caught exception ${e}`);
       reject(e);

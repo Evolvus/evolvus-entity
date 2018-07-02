@@ -45,7 +45,7 @@ module.exports.save = (object) => {
 // Returns a limited set if all the role(s) with a Promise
 // if the collectiom has no records it Returns
 // a promise with a result of  empty object i.e. {}
-module.exports.findAll = (tenantId, entityId, accessLevel, limit, orderBy) => {
+module.exports.findAll = (tenantId, entityId, accessLevel, pageSize, pageNo, orderBy) => {
   let query = {
     tenantId: tenantId,
     accessLevel: {
@@ -55,11 +55,12 @@ module.exports.findAll = (tenantId, entityId, accessLevel, limit, orderBy) => {
       $regex: entityId + ".*"
     },
   };
-
-  if (limit < 1) {
-    return entityCollection.find(query).sort(orderBy);
+  var qskip = pageSize * (pageNo - 1);
+  var qlimit = pageSize;
+  if (qlimit < 1) {
+    return entityCollection.find(query).skip(qskip).limit(qlimit).sort(orderBy);
   } else {
-    return entityCollection.find(query).limit(limit).sort(orderBy);
+    return entityCollection.find(query).skip(qskip).limit(qlimit).sort(orderBy);
   }
 };
 
@@ -151,21 +152,22 @@ module.exports.findById = (id) => {
 // Filters entity collection by entityDetails
 // Returns a promise
 
-module.exports.filterByEntityDetails = (filterQuery, orderBy) => {
-  return new Promise((resolve, reject) => {
-    try {
-      entityCollection.find(filterQuery).sort(orderBy).then((docs) => {
-        debug(`Documents filterd by ${filterQuery} are ${docs}`);
-        resolve(docs);
-      }).catch((e) => {
-        debug(`Failed to filter due to ${e}`);
-        reject(e);
-      });
-    } catch (e) {
-      debug(`Caught Exception ${e}`);
-      reject(e);
+module.exports.filterByEntityDetails = (filterQuery, pageSize, pageNo, orderBy) => {
+  try {
+    var qskip = pageSize * (pageNo - 1);
+    var qlimit = pageSize;
+    if (qlimit < 1) {
+      // var list =[];
+      // list.push(roleCollection.find(query).sort(orderBy));
+      // console.log(list.length);
+      return entityCollection.find(filterQuery).skip(qskip).limit(qlimit).sort(orderBy);
+    } else {
+      return entityCollection.find(filterQuery).skip(qskip).limit(qlimit).sort(orderBy);
     }
-  });
+  } catch (e) {
+    debug(`Caught Exception ${e}`);
+    reject(e);
+  }
 };
 
 //Finds one entity by its code and updates it with new values
@@ -199,8 +201,15 @@ module.exports.update = (id, update) => {
   });
 };
 
-// Deletes all the entries of the collection.
-// To be used by test only
-module.exports.deleteAll = () => {
-  return entityCollection.remove({});
+module.exports.entityCounts = (countQuery, limit, orderBy) => {
+    if (limit < 1) {
+      return entityCollection.count(countQuery).sort(orderBy);
+    } else {
+      return entityCollection.count(countQuery).sort(orderBy);
+    }
 };
+    // Deletes all the entries of the collection.
+    // To be used by test only
+    module.exports.deleteAll = () => {
+      return entityCollection.remove({});
+    };

@@ -28,8 +28,8 @@ describe("db branch testing", () => {
     // add a valid branch object
     "tenantId": "IVL",
     "entityCode": "entity1",
-    "name": "entity1",
-    "parent": "entityparent1",
+    "name": "headOffice",
+    "parent": "headOffice",
     "description": "bc1 description",
     "createdBy": "SYSTEM",
     "createdDate": new Date().toISOString(),
@@ -40,12 +40,36 @@ describe("db branch testing", () => {
     // add a valid branch object
     "tenantId": "IVL",
     "entityCode": "entity2",
-    "name": "entity2",
-    "parent": "entityparent2",
+    "name": "southZone",
+    "parent": "headOffice",
     "description": "bc1 description",
     "createdBy": "SYSTEM",
     "createdDate": new Date().toISOString(),
     "entityId": "abc12def456",
+    "accessLevel": "1"
+  };
+  let object3 = {
+    // add a valid branch object
+    "tenantId": "IVL",
+    "entityCode": "entity3",
+    "name": "northZone",
+    "parent": "headOffice",
+    "description": "entity3 description",
+    "createdBy": "SYSTEM",
+    "createdDate": new Date().toISOString(),
+    "entityId": "abc12jhg45",
+    "accessLevel": "0"
+  };
+  let object4 = {
+    // add a valid branch object
+    "tenantId": "IVL",
+    "entityCode": "entity4",
+    "name": "karanataka",
+    "parent": "southZone",
+    "description": "entity4 description",
+    "createdBy": "SYSTEM",
+    "createdDate": new Date().toISOString(),
+    "entityId": "abc12kff34",
     "accessLevel": "1"
   };
 
@@ -101,7 +125,7 @@ describe("db branch testing", () => {
     });
   });
 
-  describe("testing branch.findAll by limit", () => {
+  describe("testing entity.findAll by limit", () => {
     let object1 = {
       // add a valid branch object
       "tenantId": "IVL",
@@ -136,7 +160,7 @@ describe("db branch testing", () => {
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
       "entityId": "abc12jhg45",
-      "accessLevel": "0"
+      "accessLevel": "2"
     };
     let object4 = {
       // add a valid branch object
@@ -173,26 +197,26 @@ describe("db branch testing", () => {
     // There are 3 roles with entity 'Entity',tenandId 'tid' and accessLevel 1 and one role with accessLevel 0
     // Query the collection with tenantId 'tid', accessLevel 1 and entity 'Entity'
     // It should return 3 records
-    it("should return 3 records based on filter condition", (done) => {
+    it("should return 2 records based on filter condition", (done) => {
       let orderBy = {
-        name: 1
+      lastUpdatedDate: -1
       };
-      let res = branch.findAll('IVL', 'abc12', "1", -1, orderBy);
+      let res = branch.findAll('IVL', 'abc12', "1", 2,2, orderBy);
       expect(res)
         .to.be.fulfilled.then((docs) => {
           expect(docs)
             .to.be.a('array');
           expect(docs.length)
-            .to.eql(3);
+            .to.eql(2);
           expect(docs[0])
             .to.have.property('tenantId')
             .to.eql('IVL');
           expect(docs[0])
             .to.have.property('entityId')
-            .to.eql('abc12');
+            .to.eql(object3.entityId);
           expect(docs[0])
             .to.have.property('accessLevel')
-            .to.eql("4");
+            .to.eql("2");
           done();
         }, (err) => {
           done(err);
@@ -204,15 +228,15 @@ describe("db branch testing", () => {
 
     it("should return limited number records based on filter condition", (done) => {
       let orderBy = {
-        name: 1
+      lastUpdatedDate: -1
       };
-      let res = branch.findAll('IVL', 'abc12', "1", 2, orderBy);
+      let res = branch.findAll('IVL', 'abc12', "1",3, 1, orderBy);
       expect(res)
         .to.be.fulfilled.then((docs) => {
           expect(docs)
             .to.be.a('array');
           expect(docs.length)
-            .to.equal(2);
+            .to.equal(3);
           expect(docs[0])
             .to.have.property('tenantId')
             .to.eql('IVL');
@@ -232,7 +256,7 @@ describe("db branch testing", () => {
     });
   });
 
-  describe("testing branch.find without data", () => {
+  describe("testing entity.find without data", () => {
     // delete all records
     // find should return empty array
     beforeEach((done) => {
@@ -244,9 +268,9 @@ describe("db branch testing", () => {
 
     it("should return empty array i.e. []", (done) => {
       let orderBy = {
-        name: 1
+      lastUpdatedDate: -1
       };
-      let res = branch.findAll('tid', 'abc12', 1, 2, orderBy);
+      let res = branch.findAll('tid', 'abc12', 2, 3, orderBy);
       expect(res)
         .to.be.fulfilled.then((docs) => {
           expect(docs)
@@ -551,7 +575,7 @@ describe("db branch testing", () => {
         parent: "entityparent1",
         enableFlag: true
 
-      });
+      },5,1);
       expect(res).to.eventually.be.a("array")
         .to.have.length(1)
         .notify(done);
@@ -563,10 +587,43 @@ describe("db branch testing", () => {
     it("should return empty array as there are no entity matching the query parameter ", (done) => {
       var res = branch.filterByEntityDetails({
         processingStatus: 'auuthorized',
-      });
+      },5,1);
       expect(res).to.eventually.be.a("array")
         .to.have.length(0)
         .notify(done);
     });
+  });
+
+  describe("testing entity.entityCounts", () => {
+    //  Delete all records, insert two record
+    //  1. Query by one attribute and it should return all roles having attribute value
+    //2. Query by an arbitrary attribute value and it should return {}
+
+    //delete all records and insert two roles
+    beforeEach((done) => {
+      branch.deleteAll().then(() => {
+        branch.save(object1).then((res) => {
+          branch.save(object2).then((res) => {
+            branch.save(object3).then((res) => {
+              branch.save(object4).then((res) => {
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+
+    it("should return Count for valid attribute value", (done) => {
+      // take one valid attribute and its value
+      let res = branch.entityCounts({
+        processingStatus: "PENDING_AUTHORIZATION"
+      });
+         expect(res)
+        .to.eventually.deep.equal(4)
+        .notify(done);
+
+    });
+
   });
 });

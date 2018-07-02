@@ -201,37 +201,18 @@ describe('branch model validation', () => {
       });
     });
 
-    it('should return limited records as specified by the limit parameter', (done) => {
+    it('should return limited records as specified by the pageNo parameter', (done) => {
       try {
         let orderBy = {
-          name: 1
+        lastUpdatedDate: -1
         };
-        let res = branch.getAll('IVL', 'abc12', "1", 2, orderBy);
+        let res = branch.getAll('IVL', 'abc12', "1", 2, 2,orderBy);
         expect(res)
           .to.be.fulfilled.then((docs) => {
             expect(docs)
               .to.be.a('array');
             expect(docs.length)
-              .to.equal(2);
-            done();
-          });
-      } catch (e) {
-        expect.fail(e, null, `exception: ${e}`);
-      }
-    });
-
-    it('should return all records if limit is null or undefined', (done) => {
-      try {
-        let orderBy = {
-          name: 1
-        };
-        let res = branch.getAll('IVL', 'abc12', "1", null, orderBy);
-        expect(res)
-          .to.be.fulfilled.then((docs) => {
-            expect(docs)
-              .to.be.a('array');
-            expect(docs.length)
-              .to.equal(3);
+              .to.equal(1);
             done();
           });
       } catch (e) {
@@ -241,16 +222,16 @@ describe('branch model validation', () => {
 
     it('should return records sorted by entityId if orderBy is null or undefined', (done) => {
       try {
-        let res = branch.getAll('IVL', 'abc12', "1", 2, null);
+        let res = branch.getAll('IVL', 'abc12', "1", 2,2, null);
         expect(res)
           .to.be.fulfilled.then((docs) => {
             expect(docs)
               .to.be.a('array');
             expect(docs.length)
-              .to.equal(2);
+              .to.equal(1);
             expect(docs[0])
               .to.have.property('entityId')
-              .to.eql('abc12');
+              .to.eql('abc12dfgh45');
             done();
           });
       } catch (e) {
@@ -262,15 +243,15 @@ describe('branch model validation', () => {
     it('should return records sorted by entityId', (done) => {
       try {
         let orderBy = {
-          name: 1
+        lastUpdatedDate: -1
         };
-        let res = branch.getAll('IVL', 'abc12', "1", 2, orderBy);
+        let res = branch.getAll('IVL', 'abc12', "1",0, 2, orderBy);
         expect(res)
           .to.be.fulfilled.then((docs) => {
             expect(docs)
               .to.be.a('array');
             expect(docs.length)
-              .to.equal(2);
+              .to.equal(3);
             expect(docs[0])
               .to.have.property('entityId')
               .to.eql('abc12');
@@ -293,7 +274,7 @@ describe('branch model validation', () => {
 
     it('should return empty array when limit is -1', (done) => {
       try {
-        let res = branch.getAll('IVL', 'abc12', "1", 2, null);
+        let res = branch.getAll('IVL', 'abc12', "1",2, 2, null);
         expect(res)
           .to.be.fulfilled.then((docs) => {
             expect(docs)
@@ -664,7 +645,7 @@ describe('branch model validation', () => {
       var res = branch.filterByEntityDetails({
         "processingStatus": "PENDING_AUTHORIZATION"
 
-      });
+      },5,1);
       expect(res).to.eventually.be.a("array")
         .to.have.length(2)
         .notify(done);
@@ -800,4 +781,70 @@ describe('branch model validation', () => {
         .notify(done);
     });
   });
+
+  describe("testing getEntityCounts", () => {
+
+    let object1 = {
+        //add one valid role object here
+        "tenantId": "IVL",
+        "enabledFlag": true,
+        "entityCode": "entity1",
+        "name": "entity1",
+        "parent": "entityparent1",
+        "description": "entity1 description",
+        "createdBy": "SYSTEM",
+        "createdDate": new Date().toISOString(),
+        "entityId": "abc12",
+        "accessLevel": "1"
+
+      },
+      object2 = {
+        //add one more valid role object here
+        "tenantId": "IVL",
+        "entityCode": "entity2",
+        "name": "entity2",
+        "parent": "entityparent2",
+        "description": "entity2 description",
+        "createdBy": "SYSTEM",
+        "createdDate": new Date().toISOString(),
+        "entityId": "abc12def34",
+        "accessLevel": "1"
+      };
+
+    beforeEach((done) => {
+      db.deleteAll()
+        .then((res) => {
+          db.save(object1)
+            .then((res) => {
+              id = res._id;
+              db.save(object2)
+                .then((res) => {
+                  done();
+                });
+            });
+        });
+    });
+
+    //Query by processing status as PENDING_AUTHORIZATION, activationStatus as inACTIVE and applicationCode as CDA
+    // It should return array with only one object
+    it("should return entity count  based on query ", (done) => {
+      var res = branch.getEntityCounts({
+        "processingStatus": "PENDING_AUTHORIZATION"
+
+      });
+      expect(res).to.eventually.deep.equal(2)
+        .notify(done);
+    });
+
+    //Query by activation status as ACTIVE
+    //It should return empty array as there are no entity with activation status as inACTIVE
+    it("should return 0 as there are no entity matching the query parameter ", (done) => {
+      var res = branch.getEntityCounts({
+        processingStatus: 'inACTIVE'
+      });
+      expect(res).to.eventually.deep.equal(0)
+        .notify(done);
+    });
+
+});
 });

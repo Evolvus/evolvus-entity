@@ -1,6 +1,6 @@
 {
   "name": "evolvus-entity",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Entity encapsulates Entity functionality across all Evolvus products",
   "main": "index.js",
   "scripts": {
