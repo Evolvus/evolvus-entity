@@ -79,6 +79,10 @@ var entitySchema = new mongoose.Schema({
     type: Date,
     required: true
   },
+  lastUpdatedDate: {
+    type: Date,
+    required: true
+  },
   parent: {
     type: String,
     required: true,

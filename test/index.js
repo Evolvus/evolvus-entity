@@ -27,6 +27,7 @@ describe('branch model validation', () => {
     "description": "entity1 description",
     "createdBy": "SYSTEM",
     "createdDate": new Date().toISOString(),
+    "lastUpdatedDate": new Date().toISOString(),
     "entityId": "abc12",
     "accessLevel": "1"
   };
@@ -163,6 +164,7 @@ describe('branch model validation', () => {
         "description": "entity1 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
+        "lastUpdatedDate": new Date().toISOString(),
         "entityId": "abc12",
         "accessLevel": "1"
       },
@@ -175,6 +177,7 @@ describe('branch model validation', () => {
         "description": "entity2 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
+        "lastUpdatedDate": new Date().toISOString(),
         "entityId": "abc12def34",
         "accessLevel": "2"
       };
@@ -186,6 +189,7 @@ describe('branch model validation', () => {
       "description": "entity3 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
+      "lastUpdatedDate": new Date().toISOString(),
       "entityId": "abc12dfgh45",
       "accessLevel": "3"
     };
@@ -300,6 +304,7 @@ describe('branch model validation', () => {
       "description": "entity1 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
+      "lastUpdatedDate": new Date().toISOString(),
       "entityId": "abc12",
       "accessLevel": "1"
     };
@@ -384,6 +389,7 @@ describe('branch model validation', () => {
         "description": "entity1 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
+        "lastUpdatedDate": new Date().toISOString(),
         "entityId": "abc12",
         "accessLevel": "1"
       },
@@ -396,6 +402,7 @@ describe('branch model validation', () => {
         "description": "entity2 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
+        "lastUpdatedDate": new Date().toISOString(),
         "entityId": "abc12def34",
         "accessLevel": "1"
       };
@@ -496,6 +503,7 @@ describe('branch model validation', () => {
         "description": "entity1 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
+        "lastUpdatedDate": new Date().toISOString(),
         "entityId": "abc12",
         "accessLevel": "1"
       },
@@ -508,6 +516,7 @@ describe('branch model validation', () => {
         "description": "entity2 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
+        "lastUpdatedDate": new Date().toISOString(),
         "entityId": "abc13def34",
         "accessLevel": "1"
       };
@@ -608,6 +617,7 @@ describe('branch model validation', () => {
         "description": "entity1 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
+        "lastUpdatedDate": new Date().toISOString(),
         "entityId": "abc12",
         "accessLevel": "1"
 
@@ -621,6 +631,7 @@ describe('branch model validation', () => {
         "description": "entity2 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
+        "lastUpdatedDate": new Date().toISOString(),
         "entityId": "abc12def34",
         "accessLevel": "1"
       };
@@ -691,6 +702,7 @@ describe('branch model validation', () => {
         "description": "entity1 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
+        "lastUpdatedDate": new Date().toISOString(),
         "entityId": "abc12",
         "accessLevel": "1"
       },
@@ -703,6 +715,7 @@ describe('branch model validation', () => {
         "description": "entity2 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
+        "lastUpdatedDate": new Date().toISOString(),
         "entityId": "abc12def34",
         "accessLevel": "1"
       };
@@ -794,6 +807,7 @@ describe('branch model validation', () => {
         "description": "entity1 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
+        "lastUpdatedDate": new Date().toISOString(),
         "entityId": "abc12",
         "accessLevel": "1"
 
@@ -807,6 +821,7 @@ describe('branch model validation', () => {
         "description": "entity2 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
+        "lastUpdatedDate": new Date().toISOString(),
         "entityId": "abc12def34",
         "accessLevel": "1"
       };

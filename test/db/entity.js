@@ -33,6 +33,7 @@ describe("db branch testing", () => {
     "description": "bc1 description",
     "createdBy": "SYSTEM",
     "createdDate": new Date().toISOString(),
+    "lastUpdatedDate": new Date().toISOString(),
     "accessLevel": "1",
     "entityId": "abc12"
   };
@@ -45,6 +46,7 @@ describe("db branch testing", () => {
     "description": "bc1 description",
     "createdBy": "SYSTEM",
     "createdDate": new Date().toISOString(),
+    "lastUpdatedDate": new Date().toISOString(),
     "entityId": "abc12def456",
     "accessLevel": "1"
   };
@@ -57,6 +59,7 @@ describe("db branch testing", () => {
     "description": "entity3 description",
     "createdBy": "SYSTEM",
     "createdDate": new Date().toISOString(),
+    "lastUpdatedDate": new Date().toISOString(),
     "entityId": "abc12jhg45",
     "accessLevel": "0"
   };
@@ -69,6 +72,7 @@ describe("db branch testing", () => {
     "description": "entity4 description",
     "createdBy": "SYSTEM",
     "createdDate": new Date().toISOString(),
+    "lastUpdatedDate": new Date().toISOString(),
     "entityId": "abc12kff34",
     "accessLevel": "1"
   };
@@ -95,6 +99,7 @@ describe("db branch testing", () => {
         "description": "entity1 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
+        "lastUpdatedDate": new Date().toISOString(),
         "entityId": "abc12",
         "accessLevel": "1"
       };
@@ -115,6 +120,7 @@ describe("db branch testing", () => {
         "description": "entity1 description",
         "createdBy": "SYSTEM",
         "createdDate": new Date().toISOString(),
+        "lastUpdatedDate": new Date().toISOString(),
         "processingStatus": "authorized",
         "accessLevel": "1"
       };
@@ -135,6 +141,7 @@ describe("db branch testing", () => {
       "description": "entity1 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
+      "lastUpdatedDate": new Date().toISOString(),
       "entityId": "abc12",
       "accessLevel": "4"
     };
@@ -147,6 +154,7 @@ describe("db branch testing", () => {
       "description": "entity2 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
+      "lastUpdatedDate": new Date().toISOString(),
       "entityId": "abc12def345",
       "accessLevel": "3"
     };
@@ -159,6 +167,7 @@ describe("db branch testing", () => {
       "description": "entity3 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
+      "lastUpdatedDate": new Date().toISOString(),
       "entityId": "abc12jhg45",
       "accessLevel": "2"
     };
@@ -171,6 +180,7 @@ describe("db branch testing", () => {
       "description": "entity4 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
+      "lastUpdatedDate": new Date().toISOString(),
       "entityId": "abc12kff34",
       "accessLevel": "1"
     };
@@ -305,6 +315,7 @@ describe("db branch testing", () => {
       "description": "entity1 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
+      "lastUpdatedDate": new Date().toISOString(),
       "entityId": "abc12",
       "accessLevel": "1"
     };
@@ -347,6 +358,7 @@ describe("db branch testing", () => {
       "description": "entity1 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
+      "lastUpdatedDate": new Date().toISOString(),
       "entityId": "abc12",
       "accessLevel": "1"
     };
@@ -359,6 +371,7 @@ describe("db branch testing", () => {
       "description": "entity2 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
+      "lastUpdatedDate": new Date().toISOString(),
       "entityId": "abc13def345",
       "accessLevel": "1"
     };
@@ -412,6 +425,7 @@ describe("db branch testing", () => {
       "description": "entity1 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
+      "lastUpdatedDate": new Date().toISOString(),
       "entityId": "abc12",
       "accessLevel": "1"
     };
@@ -424,6 +438,7 @@ describe("db branch testing", () => {
       "description": "entity2 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
+      "lastUpdatedDate": new Date().toISOString(),
       "entityId": "abc13def345",
       "accessLevel": "1"
     };
@@ -473,6 +488,7 @@ describe("db branch testing", () => {
       "description": "entity1 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
+      "lastUpdatedDate": new Date().toISOString(),
       "entityId": "abc12",
       "accessLevel": "1"
     };
@@ -485,6 +501,7 @@ describe("db branch testing", () => {
       "description": "entity2 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
+      "lastUpdatedDate": new Date().toISOString(),
       "entityId": "abc13def345",
       "accessLevel": "1"
     };
@@ -540,6 +557,7 @@ describe("db branch testing", () => {
       "description": "entity1 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
+      "lastUpdatedDate": new Date().toISOString(),
       "entityId": "abc12",
       "accessLevel": "1"
     };
@@ -552,6 +570,7 @@ describe("db branch testing", () => {
       "description": "entity2 description",
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
+      "lastUpdatedDate": new Date().toISOString(),
       "entityId": "abc13def34",
       "accessLevel": "1"
     };

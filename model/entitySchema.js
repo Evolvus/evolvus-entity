@@ -128,5 +128,5 @@ module.exports.schema = {
       }
     }
   },
-  "required": ["tenantId", "entityCode", "name", "parent", "description", "createdBy", "createdDate", "accessLevel", "entityId"]
+  "required": ["tenantId", "entityCode", "name", "parent", "description", "createdBy", "createdDate", "accessLevel", "entityId","lastUpdatedDate"]
 };
