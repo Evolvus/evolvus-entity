@@ -653,8 +653,9 @@ describe('branch model validation', () => {
     //Query by processing status as PENDING_AUTHORIZATION, activationStatus as inACTIVE and applicationCode as CDA
     // It should return array with only one object
     it("should return filterd values based on query ", (done) => {
-      var res = branch.filterByEntityDetails({
+      var res = branch.filterByEntityDetails( "IVL","abc12","1",{
         "processingStatus": "PENDING_AUTHORIZATION"
+
 
       },5,1);
       expect(res).to.eventually.be.a("array")
@@ -665,9 +666,9 @@ describe('branch model validation', () => {
     //Query by activation status as ACTIVE
     //It should return empty array as there are no entity with activation status as inACTIVE
     it("should return empty array as there are no entity matching the query parameter ", (done) => {
-      var res = branch.filterByEntityDetails({
+      var res = branch.filterByEntityDetails("IVL","abc12","1",{
         processingStatus: 'inACTIVE'
-      });
+      },5,1);
       expect(res).to.eventually.be.a("array")
         .to.have.length(0)
         .notify(done);
@@ -843,9 +844,8 @@ describe('branch model validation', () => {
     //Query by processing status as PENDING_AUTHORIZATION, activationStatus as inACTIVE and applicationCode as CDA
     // It should return array with only one object
     it("should return entity count  based on query ", (done) => {
-      var res = branch.getEntityCounts({
+      var res = branch.getEntityCounts("IVL","abc12","1",{
         "processingStatus": "PENDING_AUTHORIZATION"
-
       });
       expect(res).to.eventually.deep.equal(2)
         .notify(done);
@@ -854,7 +854,7 @@ describe('branch model validation', () => {
     //Query by activation status as ACTIVE
     //It should return empty array as there are no entity with activation status as inACTIVE
     it("should return 0 as there are no entity matching the query parameter ", (done) => {
-      var res = branch.getEntityCounts({
+      var res = branch.getEntityCounts("IVL","abc12","1",{
         processingStatus: 'inACTIVE'
       });
       expect(res).to.eventually.deep.equal(0)

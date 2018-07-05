@@ -101,7 +101,7 @@ module.exports.getAll = (tenantId, entityId, accessLevel, pageSize, pageNo, orde
       docketObject.details = `entity getAll method`;
       docketClient.postToDocket(docketObject);
 
-      entityCollection.findAll(tenantId, entityId, accessLevel,  pageSize, pageNo, orderBy).then((docs) => {
+      entityCollection.findAll(tenantId, entityId, accessLevel, pageSize, pageNo, orderBy).then((docs) => {
         debug(`entity(s) stored in the database are ${docs}`);
         resolve(docs);
       }).catch((e) => {
@@ -231,7 +231,7 @@ module.exports.getMany = (attribute, value, orderBy) => {
   });
 };
 
-module.exports.filterByEntityDetails = (filterQuery, pageSize,pageNo,orderBy) => {
+module.exports.filterByEntityDetails = (tenantId, entityId, accessLevel, filterQuery, pageSize, pageNo, orderBy) => {
   return new Promise((resolve, reject) => {
     try {
       let queryObject = {};
@@ -258,7 +258,7 @@ module.exports.filterByEntityDetails = (filterQuery, pageSize,pageNo,orderBy) =>
       docketObject.details = `entity_filterByEntityDetails initiated`;
       docketClient.postToDocket(docketObject);
 
-      entityCollection.filterByEntityDetails(queryObject, pageSize,pageNo, orderBy).then((filteredData) => {
+      entityCollection.filterByEntityDetails(tenantId, entityId, accessLevel, queryObject, pageSize, pageNo, orderBy).then((filteredData) => {
         if (filteredData.length > 0) {
           debug(`filtered Data is ${filteredData}`);
           resolve(filteredData);
@@ -308,7 +308,7 @@ module.exports.update = (id, update) => {
   });
 };
 
-module.exports.getEntityCounts = (countQuery, orderBy) => {
+module.exports.getEntityCounts = (tenantId, entityId, accessLevel, countQuery, orderBy) => {
   return new Promise((resolve, reject) => {
     try {
       let queryObject = {};
@@ -335,7 +335,7 @@ module.exports.getEntityCounts = (countQuery, orderBy) => {
       docketObject.details = `entity_getEntityCounts initiated`;
       docketClient.postToDocket(docketObject);
 
-      entityCollection.entityCounts(queryObject, orderBy).then((entityCount) => {
+      entityCollection.entityCounts(tenantId, entityId, accessLevel, queryObject, orderBy).then((entityCount) => {
         if (entityCount > 0) {
           debug(`entityCount Data is ${entityCount}`);
           resolve(entityCount);

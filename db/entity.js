@@ -152,22 +152,25 @@ module.exports.findById = (id) => {
 // Filters entity collection by entityDetails
 // Returns a promise
 
-module.exports.filterByEntityDetails = (filterQuery, pageSize, pageNo, orderBy) => {
-  try {
-    var qskip = pageSize * (pageNo - 1);
-    var qlimit = pageSize;
-    if (qlimit < 1) {
-      // var list =[];
-      // list.push(roleCollection.find(query).sort(orderBy));
-      // console.log(list.length);
-      return entityCollection.find(filterQuery).skip(qskip).limit(qlimit).sort(orderBy);
-    } else {
-      return entityCollection.find(filterQuery).skip(qskip).limit(qlimit).sort(orderBy);
-    }
-  } catch (e) {
-    debug(`Caught Exception ${e}`);
-    reject(e);
+module.exports.filterByEntityDetails = (tenantId, entityId, accessLevel, filterQuery, pageSize, pageNo, orderBy) => {
+  filterQuery.tenantId = tenantId;
+  filterQuery.accessLevel = {
+    $gte: accessLevel
+  };
+  filterQuery.entityId = {
+    $regex: entityId + ".*"
+  };
+  var qskip = pageSize * (pageNo - 1);
+  var qlimit = pageSize;
+  if (qlimit < 1) {
+    // var list =[];
+    // list.push(roleCollection.find(query).sort(orderBy));
+    // console.log(list.length);
+    return entityCollection.find(filterQuery).skip(qskip).limit(qlimit).sort(orderBy);
+  } else {
+    return entityCollection.find(filterQuery).skip(qskip).limit(qlimit).sort(orderBy);
   }
+
 };
 
 //Finds one entity by its code and updates it with new values
@@ -201,15 +204,23 @@ module.exports.update = (id, update) => {
   });
 };
 
-module.exports.entityCounts = (countQuery, limit, orderBy) => {
-    if (limit < 1) {
-      return entityCollection.count(countQuery).sort(orderBy);
-    } else {
-      return entityCollection.count(countQuery).sort(orderBy);
-    }
+module.exports.entityCounts = (tenantId, entityId, accessLevel, countQuery, limit, orderBy) => {
+  countQuery.tenantId = tenantId;
+  countQuery.accessLevel = {
+    $gte: accessLevel
+  };
+  countQuery.entityId = {
+    $regex: entityId + ".*"
+  };
+
+  if (limit < 1) {
+    return entityCollection.count(countQuery).sort(orderBy);
+  } else {
+    return entityCollection.count(countQuery).sort(orderBy);
+  }
 };
-    // Deletes all the entries of the collection.
-    // To be used by test only
-    module.exports.deleteAll = () => {
-      return entityCollection.remove({});
-    };
+// Deletes all the entries of the collection.
+// To be used by test only
+module.exports.deleteAll = () => {
+  return entityCollection.remove({});
+};

@@ -61,7 +61,7 @@ describe("db branch testing", () => {
     "createdDate": new Date().toISOString(),
     "lastUpdatedDate": new Date().toISOString(),
     "entityId": "abc12jhg45",
-    "accessLevel": "0"
+    "accessLevel": "1"
   };
   let object4 = {
     // add a valid branch object
@@ -571,7 +571,7 @@ describe("db branch testing", () => {
       "createdBy": "SYSTEM",
       "createdDate": new Date().toISOString(),
       "lastUpdatedDate": new Date().toISOString(),
-      "entityId": "abc13def34",
+      "entityId": "abc12def34",
       "accessLevel": "1"
     };
 
@@ -589,9 +589,9 @@ describe("db branch testing", () => {
     //Query by processing status as PENDING_AUTHORIZATION, activationStatus as ACTIVE and applicationCode as CDA
     // It should return array of 2 objects
     it("should return filterd values based on query ", (done) => {
-      var res = branch.filterByEntityDetails({
+      var res = branch.filterByEntityDetails("IVL","abc12","1",{
         processingStatus: "PENDING_AUTHORIZATION",
-        parent: "entityparent1",
+        parent: "entityparent2",
         enableFlag: true
 
       },5,1);
@@ -604,7 +604,7 @@ describe("db branch testing", () => {
     //Query by processing status as authorized
     //It should return empty array as there are no entity with processing status as authorized
     it("should return empty array as there are no entity matching the query parameter ", (done) => {
-      var res = branch.filterByEntityDetails({
+      var res = branch.filterByEntityDetails("IVL","abc12","1",{
         processingStatus: 'auuthorized',
       },5,1);
       expect(res).to.eventually.be.a("array")
@@ -635,7 +635,7 @@ describe("db branch testing", () => {
 
     it("should return Count for valid attribute value", (done) => {
       // take one valid attribute and its value
-      let res = branch.entityCounts({
+      let res = branch.entityCounts("IVL","abc12","1",{
         processingStatus: "PENDING_AUTHORIZATION"
       });
          expect(res)
